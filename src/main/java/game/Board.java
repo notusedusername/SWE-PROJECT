@@ -28,6 +28,13 @@ public class Board {
         }
 
     }
+    public void setField(int x, int y, Color player){
+        board.get(x).get(y).setColor(player);
+    }
+
+    public ArrayList<ArrayList<Field>> getBoard() {
+        return board;
+    }
 
     /**
      * A táblát olvasható {@code String} formátumra alakítja
@@ -35,10 +42,15 @@ public class Board {
      */
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder();
+        StringBuilder string = new StringBuilder();//TODO kipucolni a * debugokat
+        int[] a ={0,1, 2, 3, 4, 5, 6, 7 , 8 , 9, 10};//*
         for(int i = 0; i < board.size(); i++){
-
-            string.append("\n");
+            if(i == 0){//*
+                for(int j = 0; j < board.size(); j++){//*
+                    string.append("\t"+a[j]+". ");//*
+                }//*
+            }//*
+            string.append("\n"+ i+". ");//* csak \n
 
             string.append(board.get(i));
         }
