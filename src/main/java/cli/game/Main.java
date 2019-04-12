@@ -1,11 +1,10 @@
-package game;
 
-import java.util.ArrayList;
+package cli.game;
 
 public class Main {
 
     public static void main(String[] args){
-        GameMaster gameMaster = new GameMaster();
+        GameMasterOld gameMaster = new GameMasterOld();
         gameMaster.startNewGame();
     }
 }

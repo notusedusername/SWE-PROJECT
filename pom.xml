@@ -42,7 +42,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>game.MainApp</mainClass>
+                    <mainClass>game.GameMaster</mainClass>
                 </configuration>
             </plugin>
         </plugins>
