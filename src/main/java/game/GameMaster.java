@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class GameMaster {
@@ -11,30 +13,73 @@ public class GameMaster {
 
         Scanner scanner = new Scanner(System.in);
 
-        Integer Field1stIndex = 0;
-        Integer Field2ndIndex = 0;
-        Boolean flipflop = true;
-        while(true){
-            System.out.println(myBoard.toString()+"\nx,y:");
+        int Field1stIndex;
+        int Field2ndIndex;
+        String currentPlayer = Color.PLAYER1.toString();
+        boolean flipflop = true;
+        while(true) {
+            System.out.println(myBoard.toString() + "\n" + currentPlayer + "  x,y:");
 
             Field2ndIndex = scanner.nextInt();
             Field1stIndex = scanner.nextInt();
 
+            try {
+                if (myBoard.getBoard().get(Field1stIndex).get(Field2ndIndex).getColor() == Color.NONE) {
 
-            if(myBoard.getBoard().get(Field2ndIndex).get(Field1stIndex).getColor() == Color.NONE) {
+                    if (flipflop == true) {
+                        myBoard.setField(Field1stIndex, Field2ndIndex, Color.PLAYER1);
+                        flipflop = false;
 
-                if (flipflop == true) {
-                    myBoard.setField(Field1stIndex, Field2ndIndex, Color.PLAYER1);
-                    flipflop = false;
+                        if(isThereWinner(myBoard, getColumn(myBoard, Field2ndIndex))){
+                            System.out.println(currentPlayer+" won");
+                            break;
+                        }
+                        currentPlayer = Color.PLAYER2.toString();
+                    } else {
+                        myBoard.setField(Field1stIndex, Field2ndIndex, Color.PLAYER2);
+                        flipflop = true;
+
+                        if(isThereWinner(myBoard, myBoard.getBoard().get(Field1stIndex))){
+                            System.out.println(currentPlayer+" won");
+                            break;
+                        }
+                        currentPlayer = Color.PLAYER1.toString();
+                    }
                 } else {
-                    myBoard.setField(Field1stIndex, Field2ndIndex, Color.PLAYER2);
-                    flipflop = true;
+                    System.out.println("Oda nem tehetsz! Válassz másik helyet!");
                 }
+
             }
-            else{
-                System.out.println("Oda nem tehetsz! Válassz másik helyet!");
+            catch (Exception e){
+                continue;
             }
         }
+    }
 
+    public ArrayList<Field> getColumn(Board myBoard, int column){
+        ArrayList <Field> toReturn = new ArrayList<>();
+        for (int i = 0; i < myBoard.getBoard().size(); i++){
+            toReturn.add(myBoard.getBoard().get(i).get(column));
+        }
+        return toReturn;
+    }
+    public boolean isThereWinner(Board board, ArrayList<Field> fields){
+
+        Color previous = Color.NONE;
+
+        for (int i = 0; i < fields.size(); i++){
+
+            if(i == 0){
+                previous = fields.get(i).getColor();
+                continue;
+            }
+            else{
+                if(previous != fields.get(i).getColor()){
+                    return false;
+                }
+            }
+
+        }
+        return true;
     }
 }
