@@ -1,7 +1,6 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class GameMaster {
@@ -26,7 +25,7 @@ public class GameMaster {
             try {
                 if (myBoard.getBoard().get(Field1stIndex).get(Field2ndIndex).getColor() == Color.NONE) {
 
-                    if (flipflop == true) {
+                    if (flipflop) {
                         myBoard.setField(Field1stIndex, Field2ndIndex, Color.PLAYER1);
                         flipflop = false;
 
