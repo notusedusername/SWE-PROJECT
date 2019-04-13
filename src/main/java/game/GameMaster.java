@@ -60,7 +60,7 @@ public class GameMaster extends Application {
                 clickedNode.setStyle("-fx-background-color: "
                         + Color.PLAYER2.getColor()
                         + ";");
-                System.out.println(Color.PLAYER1.getColor());
+                System.out.println(Color.PLAYER2.getColor());
                 if (isThereWinner(myBoard, myBoard.getBoard().get(y))) {
                     System.out.println(Color.PLAYER2 + " won");
                     //TODO ne csak logolja a játék a győzelmet
@@ -70,7 +70,7 @@ public class GameMaster extends Application {
         catch (Exception e){
 
         }
-     ofield.setEventCounter(ofield.getEventCounter()+1);
+        ofield.setEventCounter(ofield.getEventCounter()+1);
     }
     @Override
     public void start(Stage primaryStage) {
@@ -107,11 +107,12 @@ public class GameMaster extends Application {
 
             }
         });
-
+/*
         for (int i = 0; i < myBoard.getBoard().size(); i++) {
             boardUI.getColumnConstraints().add(new ColumnConstraints(10, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
             boardUI.getRowConstraints().add(new RowConstraints(10, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
         }
+        */
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
         primaryStage.show();
