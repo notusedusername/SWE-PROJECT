@@ -5,11 +5,20 @@ import javafx.scene.Node;
 public class OccupiedPosition {
     /**
      * Az elfoglalandó terület koordinátáit tárolja x, y alapján
-     * a táblán.
+     * a táblán, {@code -1, -1}-re inicializálva.
      *
      */
     private int[] position = {-1, -1};
+    /**
+     * Az elfoglalandó terület grafikus megjelenése
+     */
     private Node clickedNode;
+    /**
+     * Az elfoglalásesemények száma, a {@code game.GameMaster play()} függvénye
+     * minden új játékesemény során egyszer példányosítja az osztályt, majd a
+     * {@code setEventCounter(Integer eventCounter)} segítségével változtatja az értéket,
+     * ezért nem {@code static}.
+     */
     private int eventCounter;
 
     public int getEventCounter() {

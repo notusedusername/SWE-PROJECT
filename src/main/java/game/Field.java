@@ -2,10 +2,14 @@ package game;
 
 public class Field {
     /**
-     *
+     *A tábla egy mezőjét reprezentálja,
+     * egy tulajdonsága van, a színe
      */
     private Color color;
 
+    /**
+     * Az alapértelmezett szín fehér ({@code Color.NONE}).
+     */
     public Field() {
         this.color = Color.NONE;
     }
