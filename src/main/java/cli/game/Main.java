@@ -1,4 +1,4 @@
-
+/*
 package cli.game;
 
 public class Main {
@@ -8,3 +8,4 @@ public class Main {
         gameMaster.startNewGame();
     }
 }
+*/

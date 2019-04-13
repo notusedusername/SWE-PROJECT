@@ -1,4 +1,4 @@
-
+/*
 package cli.game;
 
 import game.Board;
@@ -88,3 +88,4 @@ public class GameMasterOld {
     }
 }
 
+*/
