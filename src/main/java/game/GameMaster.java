@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -136,16 +137,61 @@ public class GameMaster extends Application {
         return Winner.NONE;
     }
 
+    public void getPlayerNames(Players players) {
+        System.out.println("Getting playernames");
+        Stage playerStage = new Stage();
+        TextField player1 = new TextField();
+        TextField player2 = new TextField();
+        Label blue = new Label("Blue:");
+        Label red = new Label("Red:");
+        player1.setPromptText("Name of BLUE Player");
+
+        player2.setPromptText("Name of RED Player");
+        Button submit = new Button("Submit");
+        Label warning = new Label("");
+        warning.setStyle("-fx-text-fill: red;");
+        VBox vbox = new VBox();
+        vbox.getChildren().addAll(blue, player1, red, player2, warning, submit);
+
+        submit.setOnMouseClicked(e -> {
+            if ((player1.getText() != null && !player1.getText().isEmpty())
+                    && (player1.getText() != null
+                    && !player2.getText().isEmpty())) {
+                players.setPlayer(player1.getText(), player2.getText());
+                playerStage.close();
+
+            } else {
+                warning.setText("Type both name!");
+            }
+        });
+        Scene playerScene = new Scene(vbox);
+        playerStage.setScene(playerScene);
+        playerStage.setFullScreen(true);
+        playerStage.setFullScreenExitHint("");
+        playerStage.showAndWait();
+
+    }
+
+    private void writeTurn(Label turn, Players players, int event) {
+        if (event % 2 == 0) {
+            turn.setText(players.getPlayer("PLAYER1") + "'s turn");
+            turn.setStyle("-fx-text-fill: navy;");
+        } else {
+            turn.setText(players.getPlayer("PLAYER2") + "'s turn");
+            turn.setStyle("-fx-text-fill: #c90000 ;");
+        }
+    }
     /**
      * Megjeleníti a játékablakot a táblával és a {@code sideMenu}-vel.
      * @param game A felhasználandó {@code Stage}, ahová rajzolhat
      */
     private void play(Stage game){
-
+        System.out.println("Game Starting");
+        Players players = new Players();
+        getPlayerNames(players);
 
         Board myBoard = new Board();
         OccupiedPosition ofield = new OccupiedPosition();
-
         BorderPane root = new BorderPane();
         GridPane boardUI = new GridPane();
         Scene scene = new Scene(root);
@@ -159,11 +205,22 @@ public class GameMaster extends Application {
         Button mainMenu = new Button("Back to Main Menu");
         Button exitGame = new Button("Exit");
 
+        Label playerList = new Label("Player List:");
+        Label p1Name = new Label(players.getPlayer("PLAYER1"));
+        Label p2Name = new Label(players.getPlayer("PLAYER2"));
+
+        p1Name.setStyle(
+                "    -fx-text-fill: navy;");
+        p2Name.setStyle(
+                "-fx-text-fill:#c90000");
+
         VBox sidemenu = new VBox();
-        sidemenu.getChildren().addAll(saveState, mainMenu, exitGame);
+        sidemenu.getChildren().addAll(saveState, mainMenu, exitGame, playerList, p1Name, p2Name);
         root.setStyle("-fx-background-color:  #4286f4;");
         root.setLeft(sidemenu);
 
+        Label playerTurn = new Label(players.getPlayer("PLAYER1") + "'s turn");
+        root.setTop(playerTurn);
         saveState.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -198,18 +255,22 @@ public class GameMaster extends Application {
                 Integer colIndex = GridPane.getColumnIndex(clickedNode);
                 Integer rowIndex = GridPane.getRowIndex(clickedNode);
                 try {
-                    if (myBoard.getBoard().get(colIndex).get(rowIndex).getColor() == Color.NONE) {
-                        System.out.println(colIndex + " " + rowIndex);
-                        ofield.setPosition(colIndex, rowIndex);
-                        ofield.setClickedNode(clickedNode);
-                        String winner = changeColor(ofield.getEventCounter(), ofield, myBoard, root).toString();
-                        if (!winner.equals("NONE")) {
-                            printWinner(winner, game);
-                        }
-                    }
-                }catch (NullPointerException e){
+                    myBoard.getBoard().get(colIndex).get(rowIndex).getColor();
+                } catch (NullPointerException e) {
                     // A játékos a griden kívülre kattint
+                    return;
                 }
+                if (myBoard.getBoard().get(colIndex).get(rowIndex).getColor() == Color.NONE) {
+                    System.out.println(colIndex + " " + rowIndex);
+                    ofield.setPosition(colIndex, rowIndex);
+                    ofield.setClickedNode(clickedNode);
+                    writeTurn(playerTurn, players, ofield.getEventCounter());
+                    String winner = changeColor(ofield.getEventCounter(), ofield, myBoard, root).toString();
+                    if (!winner.equals("NONE")) {
+                        printWinner(players.getPlayer(winner), game);
+                    }
+                }
+
             }
         });
 
@@ -265,6 +326,8 @@ public class GameMaster extends Application {
 
         Scene scene = new Scene(hbox);
         scene.getStylesheets().add("styles/Styles.css");
+        winnerScreen.setFullScreen(true);
+        winnerScreen.setFullScreenExitHint("");
         winnerScreen.setScene(scene);
         winnerScreen.show();
     }
