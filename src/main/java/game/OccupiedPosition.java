@@ -2,6 +2,9 @@ package game;
 
 import javafx.scene.Node;
 
+/**
+ * A játékosok által elfogalt mezőket kezelő osztály
+ */
 public class OccupiedPosition {
     /**
      * Az elfoglalandó terület koordinátáit tárolja x, y alapján

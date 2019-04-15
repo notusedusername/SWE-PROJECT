@@ -1,10 +1,11 @@
 package game;
 
+/**
+ * A tábla egy mezőjét reprezentálja,
+ * egy tulajdonsága van, a színe
+ */
 public class Field {
-    /**
-     *A tábla egy mezőjét reprezentálja,
-     * egy tulajdonsága van, a színe
-     */
+
     private Color color;
 
     /**

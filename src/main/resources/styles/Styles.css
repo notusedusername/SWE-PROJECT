@@ -1,25 +1,26 @@
 * {
     -fx-font-weight: bold;
-    -fx-text-fill: red;
+    -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%);
 }
 
 .button {
-    -fx-background-color: black;
+    -fx-background-color: transparent;
     -fx-min-width: 100;
     -fx-font-size: 35;
+    -fx-text-shadow: 10, 10, red;
 }
 
 .label {
-    -fx-font-size: 50;
-    -fx-background-color: gray;
+    -fx-font-size: 20;
+    -fx-background-color: transparent;
     -fx-alignment: center;
 }
 
 .scene {
     -fx-padding: 10;
-    -fx-background-color: ghostwhite;
+
 }
 
 .vbox {
-    -fx-alignment: center;
+    -fx-background-color: black;
 }

@@ -4,13 +4,23 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.ArrayList;
 
+
 /**
- * Tárolja az utolsó 5 győztes játékos nevét,
- * a grafikus megjelenítését is tartalmazza a listának.
+ * Tarolja az utolso 5 gyoztes jatekos nevet,
+ * a grafikus megjeleniteset is tartalmazza a listanak.
  */
+@javax.xml.bind.annotation.XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class LeaderBoard {
+
+    @XmlElementWrapper(name = "players")
+    @XmlElement(name = "player")
     private static ArrayList<String> name = new ArrayList<>();
 
     public ArrayList<String> getName() {
@@ -18,9 +28,9 @@ public class LeaderBoard {
     }
 
     /**
-     * Egy {@code VBox} típusú listát ad vissza last 5 winners címmel
+     * Egy {@code VBox} tipusu listat ad vissza last 5 winners cimmel
      *
-     * @return VBox típusú győzteslista 5 névvel
+     * @return VBox tipusu gyozteslista 5 nevvel
      */
     public VBox getNameAsNode() {
         VBox leaderBoard = new VBox();
@@ -33,10 +43,10 @@ public class LeaderBoard {
     }
 
     /**
-     * Hozzáadja a {@code param} nevet a listához, és eltávolítja
-     * a legkorábbi nevet, ha már van 5 név a listában.
+     * Hozzaadja a {@code param} nevet a listahoz, es eltavolitja
+     * a legkorabbi nevet, ha mar van 5 nev a listaban.
      *
-     * @param name A hozzáadandó név
+     * @param name A hozzaadando nev
      */
     public void addName(String name) {
         if (LeaderBoard.name.size() >= 5) {
@@ -46,3 +56,6 @@ public class LeaderBoard {
 
     }
 }
+
+
+

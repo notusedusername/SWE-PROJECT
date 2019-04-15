@@ -19,6 +19,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 
 /**
@@ -209,8 +210,8 @@ public class GameMaster extends Application {
         Button exitGame = new Button("Exit");
 
         Label playerList = new Label("Player List:");
-        Label p1Name = new Label(players.getPlayer("PLAYER1"));
-        Label p2Name = new Label(players.getPlayer("PLAYER2"));
+        Label p1Name = new Label(players.getPlayer("PLAYER1") + "\n (Horizontal)");
+        Label p2Name = new Label(players.getPlayer("PLAYER2") + "\n (Vertical)");
 
         p1Name.setStyle(
                 "    -fx-text-fill: navy;");
@@ -218,6 +219,8 @@ public class GameMaster extends Application {
                 "-fx-text-fill:#c90000");
 
         VBox sidemenu = new VBox();
+        sidemenu.setMinHeight(720);
+
         sidemenu.getChildren().addAll(saveState, mainMenu, exitGame, playerList, p1Name, p2Name);
         root.setStyle("-fx-background-color:  #4286f4;");
         root.setLeft(sidemenu);
@@ -294,6 +297,11 @@ public class GameMaster extends Application {
 
         LeaderBoard leaderBoard = new LeaderBoard();
         leaderBoard.addName(winner);
+        try {
+            JAXBUtil.toXML(leaderBoard, System.out);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
         Label congrats = new Label("Congrats " + winner + ", you won!");
         Button playAgain = new Button("Play again");
         Button exit = new Button("That was enough for us");
@@ -379,7 +387,7 @@ public class GameMaster extends Application {
 
         BorderPane menuRoot = new BorderPane();
         VBox menu = new VBox();
-        Scene scene = new Scene(menuRoot);
+        Scene scene = new Scene(menuRoot, javafx.scene.paint.Color.BLACK);
 
         scene.getStylesheets().add("styles/Styles.css");
 
