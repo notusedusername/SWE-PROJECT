@@ -37,7 +37,7 @@ public class JAXBUtil {
      * @throws JAXBException ha bármi probléma van a beolvasás során
      */
     public static <T> T fromXML(Class<T> clazz, InputStream is) throws JAXBException {
-        try {
+        try {//todo make it work
             JAXBContext context = JAXBContext.newInstance(clazz);
             Unmarshaller unmarshaller = context.createUnmarshaller();
             return (T) unmarshaller.unmarshal(is);

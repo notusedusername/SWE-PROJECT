@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * A játékosok nicknevét kezelő osztály
  */
 public class Players {
-    private ArrayList<String> players = new ArrayList<>();
+    private static ArrayList<String> players = new ArrayList<>();
 
     /**
      * Adott játékos nevét adja vissza

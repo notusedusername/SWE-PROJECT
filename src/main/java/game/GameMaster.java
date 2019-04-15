@@ -1,5 +1,6 @@
 package game;
 
+
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -19,7 +20,10 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -139,21 +143,31 @@ public class GameMaster extends Application {
         return Winner.NONE;
     }
 
-    private void getPlayerNames(Players players) {
+    private void getPlayerNames(Players players, Stage parent) {
         System.out.println("Getting playernames");
         Stage playerStage = new Stage();
         TextField player1 = new TextField();
         TextField player2 = new TextField();
+
+        player1.setMaxWidth(500);
+        player2.setMaxWidth(500);
+
+
         Label blue = new Label("Blue:");
         Label red = new Label("Red:");
+        blue.setId("blueLabel");
+        blue.setId("redLabel");
         player1.setPromptText("Name of BLUE Player");
 
         player2.setPromptText("Name of RED Player");
         Button submit = new Button("Submit");
+        Button cancel = new Button("Cancel");
         Label warning = new Label("");
         warning.setStyle("-fx-text-fill: red;");
+        HBox buttons = new HBox();
+        buttons.getChildren().addAll(submit, cancel);
         VBox vbox = new VBox();
-        vbox.getChildren().addAll(blue, player1, red, player2, warning, submit);
+        vbox.getChildren().addAll(blue, player1, red, player2, warning, buttons);
 
         submit.setOnMouseClicked(e -> {
             if ((player1.getText() != null && !player1.getText().isEmpty())
@@ -161,12 +175,18 @@ public class GameMaster extends Application {
                     && !player2.getText().isEmpty())) {
                 players.setPlayer(player1.getText(), player2.getText());
                 playerStage.close();
+                play(parent);
 
             } else {
                 warning.setText("Type both name!");
             }
         });
+        cancel.setOnMouseClicked(e -> {
+            playerStage.close();
+            start(parent);
+        });
         Scene playerScene = new Scene(vbox);
+        playerScene.getStylesheets().add("styles/Styles.css");
         playerStage.setScene(playerScene);
         playerStage.setFullScreen(true);
         playerStage.setFullScreenExitHint("");
@@ -191,9 +211,8 @@ public class GameMaster extends Application {
      */
     private void play(Stage game) {
         System.out.println("Game Starting");
-        Players players = new Players();
-        getPlayerNames(players);
 
+        Players players = new Players();
         Board myBoard = new Board();
         OccupiedPosition ofield = new OccupiedPosition();
         BorderPane root = new BorderPane();
@@ -205,7 +224,7 @@ public class GameMaster extends Application {
         root.setTop(title);
         root.setCenter(boardUI);
         root.setPrefSize(720, 1280);
-        Button saveState = new Button("Save");
+        //Button saveState = new Button("Save");
         Button mainMenu = new Button("Back to Main Menu");
         Button exitGame = new Button("Exit");
 
@@ -221,7 +240,7 @@ public class GameMaster extends Application {
         VBox sidemenu = new VBox();
         sidemenu.setMinHeight(720);
 
-        sidemenu.getChildren().addAll(saveState, mainMenu, exitGame, playerList, p1Name, p2Name);
+        sidemenu.getChildren().addAll(mainMenu, exitGame, playerList, p1Name, p2Name);
         root.setStyle("-fx-background-color:  #4286f4;");
         root.setLeft(sidemenu);
 
@@ -229,10 +248,13 @@ public class GameMaster extends Application {
         playerTurn.setStyle(
                 "    -fx-text-fill: navy;");
         root.setTop(playerTurn);
+        /*
         saveState.setOnMouseClicked(mouseEvent -> {
             //TODO
             System.out.println("Save gamestate");
         });
+        */
+
         mainMenu.setOnMouseClicked(mouseEvent -> {
             System.out.println("Back to main menu");
             start(game);
@@ -296,10 +318,33 @@ public class GameMaster extends Application {
         Stage winnerScreen = new Stage();
 
         LeaderBoard leaderBoard = new LeaderBoard();
-        leaderBoard.addName(winner);
+
+        //todo függvény
         try {
-            JAXBUtil.toXML(leaderBoard, System.out);
-        } catch (JAXBException e) {
+            FileInputStream fs = new FileInputStream(System.getProperty("user.home")
+                    + "/ColorWar/leaderboard.xml");
+            JAXBContext context = JAXBContext.newInstance(game.LeaderBoard.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            leaderBoard = (LeaderBoard) unmarshaller.unmarshal(fs);
+        } catch (IOException | JAXBException e) {
+            e.printStackTrace();
+        }
+        leaderBoard.addName(winner);
+        /*
+        try {
+            leaderBoard.setName(JAXBUtil.fromXML(leaderBoard.getName().getClass(), new FileInputStream(System.getProperty("user.home")
+                    +"/ColorWar/leaderboard.xml")));
+        } catch (JAXBException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
+*/
+        try {
+            File file = new File(System.getProperty("user.home") + "/ColorWar");
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            JAXBUtil.toXML(leaderBoard, new FileOutputStream(System.getProperty("user.home") + "/ColorWar/leaderboard.xml"));
+        } catch (FileNotFoundException | JAXBException e) {
             e.printStackTrace();
         }
         Label congrats = new Label("Congrats " + winner + ", you won!");
@@ -393,10 +438,10 @@ public class GameMaster extends Application {
 
         Label menuTitle = new Label("Color War");
         Button startGame = new Button("New Game");
-        Button loadGame = new Button("Load Game");
+        Button winners = new Button("Winners");
         Button exitGame = new Button("Exit");
 
-        menu.getChildren().addAll(startGame, loadGame, exitGame);
+        menu.getChildren().addAll(startGame, winners, exitGame);
         menuRoot.setCenter(menu);
         menu.setFillWidth(true);
         menuRoot.setLeft(menuTitle);
@@ -406,11 +451,36 @@ public class GameMaster extends Application {
         menuRoot.setPrefSize(720, 1280);
         startGame.setOnMouseClicked(mouseEvent -> {
             System.out.println("Starting a new game...");
-            play(primaryStage);
+            Players players = new Players();
+            getPlayerNames(players, primaryStage);
         });
-        loadGame.setOnMouseClicked(mouseEvent -> {
-            //Todo
-            System.out.println("Loading gamestate");
+        winners.setOnMouseClicked(mouseEvent -> {
+            System.out.println("Winners");
+            VBox vBox = new VBox();
+            Scene lb = new Scene(vBox);
+            Button back = new Button("Back");
+            LeaderBoard leaderBoard = new LeaderBoard();
+            //Todo olvassa be az xml-t a függvénnyel a duplikált kód helyett
+            try {
+                FileInputStream fs = new FileInputStream(System.getProperty("user.home")
+                        + "/ColorWar/leaderboard.xml");
+                JAXBContext context = JAXBContext.newInstance(game.LeaderBoard.class);
+                Unmarshaller unmarshaller = context.createUnmarshaller();
+                leaderBoard = (LeaderBoard) unmarshaller.unmarshal(fs);
+            } catch (IOException | JAXBException e) {
+                e.printStackTrace();
+            }
+            vBox.getChildren().addAll(leaderBoard.getNameAsNode(), back);
+
+
+            back.setOnMouseClicked(mouseEvent1 -> {
+                start(primaryStage);
+            });
+            primaryStage.setScene(lb);
+            primaryStage.setFullScreen(true);
+            primaryStage.setFullScreenExitHint("");
+            primaryStage.show();
+
         });
         exitGame.setOnMouseClicked(mouseEvent -> {
             System.out.println("Exiting");

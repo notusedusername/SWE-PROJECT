@@ -30,7 +30,6 @@ public class OccupiedPosition {
 
     public boolean isTheBoardFull(Board board) {
         int boardSize = board.getBoard().size();
-        System.out.println(getEventCounter());
         return getEventCounter() >= (boardSize * boardSize) / 2;
     }
 

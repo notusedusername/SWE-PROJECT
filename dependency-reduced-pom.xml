@@ -6,6 +6,14 @@
     <artifactId>swe-project</artifactId>
     <name>swe-project</name>
     <version>1.0-SNAPSHOT</version>
+    <description>Project of Software Engineering course on the University of Debrecen</description>
+    <developers>
+        <developer>
+            <id>tonor</id>
+            <name>Tóth Norbert</name>
+            <email>xnorbikax@gmail.com</email>
+        </developer>
+    </developers>
     <organization>
         <name>hu.unideb</name>
     </organization>
@@ -51,6 +59,14 @@
                 <configuration>
                     <mainClass>game.GameMaster</mainClass>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
             </plugin>
         </plugins>
     </build>

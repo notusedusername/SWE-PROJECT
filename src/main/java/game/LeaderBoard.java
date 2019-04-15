@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Tarolja az utolso 5 gyoztes jatekos nevet,
  * a grafikus megjeleniteset is tartalmazza a listanak.
  */
-@javax.xml.bind.annotation.XmlRootElement
+@javax.xml.bind.annotation.XmlRootElement(name = "leaderboard")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class LeaderBoard {
 
@@ -40,6 +40,10 @@ public class LeaderBoard {
             leaderBoard.getChildren().add(new Label("\t" + s));
         }
         return leaderBoard;
+    }
+
+    public static void setName(ArrayList<String> name) {
+        LeaderBoard.name = name;
     }
 
     /**
