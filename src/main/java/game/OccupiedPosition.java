@@ -25,6 +25,12 @@ public class OccupiedPosition {
         return eventCounter;
     }
 
+    public boolean isTheBoardFull(Board board) {
+        int boardSize = board.getBoard().size();
+        System.out.println(getEventCounter());
+        return getEventCounter() >= (boardSize * boardSize) / 2;
+    }
+
     public void setEventCounter(Integer eventCounter) {
         this.eventCounter = eventCounter;
     }

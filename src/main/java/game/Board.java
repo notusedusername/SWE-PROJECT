@@ -3,22 +3,26 @@ package game;
 
 import java.util.ArrayList;
 
+/**
+ * A tábla karakteres reprezentációja
+ * A mentés-betöltés feature-höz szükséges, illetve a játék
+ * kezdetben csak konzolos volt, később kapott grafikát.
+ */
 public class Board {
 
-    private ArrayList<ArrayList<Field>> board = new ArrayList<ArrayList<Field>>();
+    private ArrayList<ArrayList<Field>> board = new ArrayList<>();
 
     /**
      * A tábla kezdeti állapota
      */
     public Board() {
         for(int i = 0; i < 11; i++){
-            ArrayList<Field> row=new ArrayList<Field>();
+            ArrayList<Field> row = new ArrayList<>();
             for(int j = 0; j < 11; j++){
                 Field field = new Field();
                 if(i % 2 == 0 && j % 2 == 1){
                     field.setColor(Color.PLAYER1);
-                }
-                else if(i % 2 == 1 && j % 2 == 0){
+                } else if (i % 2 == 1 && j % 2 == 0) {
                     field.setColor(Color.PLAYER2);
                 }
                 row.add(field);
@@ -28,6 +32,7 @@ public class Board {
         }
 
     }
+
     public void setField(int x, int y, Color player){
         board.get(x).get(y).setColor(player);
     }
@@ -37,16 +42,17 @@ public class Board {
     }
 
     /**
-     * A táblát olvasható {@code String} formátumra alakítja
+     * A táblát olvasható {@code String} formátumra alakítja,
+     * a konzolos megjelenése is mátrix.
      * @return tábla string reprezentációja
      */
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
-        for(int i = 0; i < board.size(); i++){
+        for (ArrayList<Field> fields : board) {
             string.append("\n");
 
-            string.append(board.get(i));
+            string.append(fields);
         }
         return string.toString();
     }
