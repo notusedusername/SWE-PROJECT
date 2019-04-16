@@ -29,8 +29,8 @@ public class Players {
      * @param player2 A {@code PLAYER2} neve
      */
     public void setPlayer(String player1, String player2) {
-        this.players.add(player1);
-        this.players.add(player2);
+        players.add(player1);
+        players.add(player2);
     }
 
 }

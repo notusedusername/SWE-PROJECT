@@ -14,10 +14,6 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow(three-pass-box, rgba(182, 0, 16, 0.94), 20, 0, 5, 5);
 }
-
-.field:hover {
-    -fx-background-color: orange;
-}
 .label {
     -fx-font-size: 30;
     -fx-background-color: transparent;

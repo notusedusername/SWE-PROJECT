@@ -88,7 +88,6 @@ public class GameMaster extends Application {
                 square.setStyle("-fx-background-color: "
                         + myBoard.getBoard().get(i).get(j)
                         + ";");
-
                 boardUI.add(square, i, j);
             }
         }
