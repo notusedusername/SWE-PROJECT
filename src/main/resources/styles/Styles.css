@@ -1,26 +1,58 @@
-* {
-    -fx-font-weight: bold;
-    -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%);
+@font-face {
+    src: url("SlimPlay.ttf");
 }
 
 .button {
     -fx-background-color: transparent;
     -fx-min-width: 100;
-    -fx-font-size: 35;
-    -fx-text-shadow: 10, 10, red;
+    -fx-font-size: 25;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 250, 245, 0.94), 20, 0, 5, 5);
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, blue 0%, red 70%);
 }
 
+.button:hover, #winners .label {
+    -fx-text-fill: black;
+    -fx-effect: dropshadow(three-pass-box, rgba(182, 0, 16, 0.94), 20, 0, 5, 5);
+}
+
+.field:hover {
+    -fx-background-color: orange;
+}
 .label {
-    -fx-font-size: 20;
+    -fx-font-size: 30;
     -fx-background-color: transparent;
     -fx-alignment: center;
+    -fx-text-fill: white;
 }
 
-.scene {
-    -fx-padding: 10;
+#mainmenu, #game, #winners, #playernames, #winnerscreen, #popup, #turn, #playtitle {
+    -fx-background-image: url("background.jpg");
+    -fx-background-repeat: repeat;
+    -fx-background-position: center center;
+    /*-fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0);*/
+    -fx-padding: 10 10 10 10;
 
 }
 
-.vbox {
-    -fx-background-color: black;
+#popup .button {
+    -fx-font-size: 25;
+}
+
+#mainmenu .button {
+    -fx-font-size: 50;
+    -fx-font-weight: bold;
+
+}
+
+.button, #mainmenu .label, #playtitle {
+    -fx-font-family: "Slim Play";
+}
+
+#game .button {
+    -fx-font-size: 25;
+    -fx-font-weight: bold;
+}
+
+#title, #congrats {
+    -fx-font-size: 70;
 }

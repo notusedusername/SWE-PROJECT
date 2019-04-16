@@ -15,8 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -147,6 +145,7 @@ public class GameMaster extends Application {
     private void getPlayerNames(Players players, Stage parent) {
         System.out.println("Getting playernames");
         Stage playerStage = new Stage();
+        playerStage.setTitle("Color War");
         TextField player1 = new TextField();
         TextField player2 = new TextField();
 
@@ -166,10 +165,12 @@ public class GameMaster extends Application {
         Label warning = new Label("");
         warning.setStyle("-fx-text-fill: red;");
         HBox buttons = new HBox();
+        buttons.setAlignment(Pos.CENTER);
         buttons.getChildren().addAll(submit, cancel);
         VBox vbox = new VBox();
+        vbox.setId("playernames");
         vbox.getChildren().addAll(blue, player1, red, player2, warning, buttons);
-
+        vbox.setAlignment(Pos.CENTER);
         submit.setOnMouseClicked(e -> {
             if ((player1.getText() != null && !player1.getText().isEmpty())
                     && (player1.getText() != null
@@ -221,8 +222,9 @@ public class GameMaster extends Application {
         Scene scene = new Scene(root);
         scene.getStylesheets().add("styles/Styles.css");
         Label title = new Label("Color War");
-        title.setFont(new Font("Covik Sans", 30));
-        root.setTop(title);
+
+        title.setId("playtitle");
+
         root.setCenter(boardUI);
         root.setPrefSize(720, 1280);
         //Button saveState = new Button("Save");
@@ -230,8 +232,8 @@ public class GameMaster extends Application {
         Button exitGame = new Button("Exit");
 
         Label playerList = new Label("Player List:");
-        Label p1Name = new Label(players.getPlayer("PLAYER1") + "\n (Horizontal)");
-        Label p2Name = new Label(players.getPlayer("PLAYER2") + "\n (Vertical)");
+        Label p1Name = new Label("\t" + players.getPlayer("PLAYER1") + "\n \t(Horizontal)");
+        Label p2Name = new Label("\t" + players.getPlayer("PLAYER2") + "\n \t(Vertical)");
 
         p1Name.setStyle(
                 "    -fx-text-fill: navy;");
@@ -239,16 +241,30 @@ public class GameMaster extends Application {
                 "-fx-text-fill:#c90000");
 
         VBox sidemenu = new VBox();
-        sidemenu.setMinHeight(720);
+        sidemenu.setAlignment(Pos.CENTER_LEFT);
+        sidemenu.setSpacing(5);
+        sidemenu.getChildren().addAll(title, mainMenu, exitGame);
 
-        sidemenu.getChildren().addAll(mainMenu, exitGame, playerList, p1Name, p2Name);
+        VBox sidelist = new VBox();
+        sidelist.getChildren().addAll(playerList, p1Name, p2Name);
+        sidelist.setAlignment(Pos.CENTER_LEFT);
+        sidelist.setSpacing(5);
+
+        VBox container = new VBox();
+        container.setId("game");
+        container.getChildren().addAll(sidemenu, sidelist);
+        container.setAlignment(Pos.CENTER_LEFT);
+        container.setSpacing(100);
+
         root.setStyle("-fx-background-color:  #4286f4;");
-        root.setLeft(sidemenu);
+        root.setLeft(container);
 
         Label playerTurn = new Label(players.getPlayer("PLAYER1") + "'s turn");
         playerTurn.setStyle(
                 "    -fx-text-fill: navy;");
         root.setTop(playerTurn);
+        playerTurn.setId("turn");
+        BorderPane.setAlignment(playerTurn, Pos.CENTER_RIGHT);
         /*
         saveState.setOnMouseClicked(mouseEvent -> {
             //TODO mentés opcionálisan
@@ -317,7 +333,7 @@ public class GameMaster extends Application {
      */
     private void printWinner(String winner, Stage parent) {
         Stage winnerScreen = new Stage();
-
+        winnerScreen.setTitle("Winner");
         LeaderBoard leaderBoard = new LeaderBoard();
 
         try {
@@ -347,15 +363,23 @@ public class GameMaster extends Application {
 
         congrats.prefWidth(50);
         congrats.setWrapText(true);
-        VBox right = new VBox();
+        congrats.setId("congrats");
 
-        VBox left = new VBox();
-        right.getChildren().addAll(shrekview, playAgain, exit);
-        left.getChildren().addAll(congrats, leaderBoard.getNameAsNode());
 
-        HBox hbox = new HBox();
-        hbox.getChildren().addAll(left, right);
+        HBox bottom = new HBox();
+        bottom.getChildren().addAll(playAgain, exit);
+        BorderPane root = new BorderPane();
+        root.setTop(congrats);
+        BorderPane.setAlignment(congrats, Pos.BOTTOM_LEFT);
+        root.setLeft(leaderBoard.getNameAsNode());
+        BorderPane.setAlignment(leaderBoard.getNameAsNode(), Pos.TOP_CENTER);
+        root.setRight(shrekview);
+        BorderPane.setAlignment(shrekview, Pos.TOP_CENTER);
+        root.setBottom(bottom);
+        bottom.setAlignment(Pos.BOTTOM_RIGHT);
+        BorderPane.setAlignment(bottom, Pos.BOTTOM_RIGHT);
 
+        root.setId("winnerscreen");
         playAgain.setOnMouseClicked(mouseEvent -> {
             winnerScreen.close();
             play(new Stage());
@@ -366,7 +390,7 @@ public class GameMaster extends Application {
         if (winner.equals("TIE")) {
             congrats.setText("Do you know how to play??\n It's a tie.");
         }
-        Scene scene = new Scene(hbox);
+        Scene scene = new Scene(root);
         scene.getStylesheets().add("styles/Styles.css");
         winnerScreen.setFullScreen(true);
         winnerScreen.setFullScreenExitHint("");
@@ -381,8 +405,9 @@ public class GameMaster extends Application {
      */
     private void exit() {
         Stage dialog = new Stage();
+        dialog.setTitle("You are about to exit");
         BorderPane root = new BorderPane();
-
+        root.setId("popup");
         Label question = new Label("Are you sure?");
         Button ok = new Button("Yes");
         Button cancel = new Button("Cancel");
@@ -391,7 +416,7 @@ public class GameMaster extends Application {
         HBox buttons = new HBox();
         buttons.getChildren().addAll(ok, cancel);
         root.setBottom(buttons);
-        BorderPane.setAlignment(buttons, Pos.BOTTOM_LEFT);
+        buttons.setAlignment(Pos.BOTTOM_RIGHT);
 
         root.setMinSize(300, 100);
 
@@ -420,8 +445,9 @@ public class GameMaster extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-
+        primaryStage.setTitle("Color War");
         BorderPane menuRoot = new BorderPane();
+        menuRoot.setId("mainmenu");
         VBox menu = new VBox();
         Scene scene = new Scene(menuRoot, javafx.scene.paint.Color.BLACK);
 
@@ -432,12 +458,15 @@ public class GameMaster extends Application {
         Button winners = new Button("Winners");
         Button exitGame = new Button("Exit");
 
+        menuTitle.setId("title");
         menu.getChildren().addAll(startGame, winners, exitGame);
         menuRoot.setCenter(menu);
+        BorderPane.setAlignment(menu, Pos.BOTTOM_CENTER);
         menu.setFillWidth(true);
+        menu.setAlignment(Pos.CENTER);
         menuRoot.setLeft(menuTitle);
-        menuTitle.setTextAlignment(TextAlignment.CENTER);
-        menuTitle.setFont(new Font("Arial", 30.0));
+        BorderPane.setAlignment(menuTitle, Pos.CENTER_RIGHT);
+
 
         menuRoot.setPrefSize(720, 1280);
         startGame.setOnMouseClicked(mouseEvent -> {
@@ -448,7 +477,9 @@ public class GameMaster extends Application {
         winners.setOnMouseClicked(mouseEvent -> {
             System.out.println("Winners");
             VBox vBox = new VBox();
+            vBox.setId("winners");
             Scene lb = new Scene(vBox);
+            lb.getStylesheets().add("styles/Styles.css");
             Button back = new Button("Back");
             LeaderBoard leaderBoard = new LeaderBoard();
 
@@ -460,7 +491,8 @@ public class GameMaster extends Application {
             }
 
             vBox.getChildren().addAll(leaderBoard.getNameAsNode(), back);
-
+            vBox.setSpacing(5);
+            vBox.setAlignment(Pos.CENTER);
 
             back.setOnMouseClicked(mouseEvent1 -> {
                 start(primaryStage);
