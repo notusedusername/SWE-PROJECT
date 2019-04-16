@@ -20,10 +20,11 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -250,7 +251,7 @@ public class GameMaster extends Application {
         root.setTop(playerTurn);
         /*
         saveState.setOnMouseClicked(mouseEvent -> {
-            //TODO
+            //TODO mentés opcionálisan
             System.out.println("Save gamestate");
         });
         */
@@ -319,25 +320,14 @@ public class GameMaster extends Application {
 
         LeaderBoard leaderBoard = new LeaderBoard();
 
-        //todo függvény
         try {
-            FileInputStream fs = new FileInputStream(System.getProperty("user.home")
-                    + "/ColorWar/leaderboard.xml");
-            JAXBContext context = JAXBContext.newInstance(game.LeaderBoard.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            leaderBoard = (LeaderBoard) unmarshaller.unmarshal(fs);
-        } catch (IOException | JAXBException e) {
-            e.printStackTrace();
-        }
-        leaderBoard.addName(winner);
-        /*
-        try {
-            leaderBoard.setName(JAXBUtil.fromXML(leaderBoard.getName().getClass(), new FileInputStream(System.getProperty("user.home")
-                    +"/ColorWar/leaderboard.xml")));
+            leaderBoard = JAXBUtil.fromXML(game.LeaderBoard.class, new FileInputStream(System.getProperty("user.home")
+                    + "/ColorWar/leaderboard.xml"));
         } catch (JAXBException | FileNotFoundException e) {
             e.printStackTrace();
         }
-*/
+
+        leaderBoard.addName(winner);
         try {
             File file = new File(System.getProperty("user.home") + "/ColorWar");
             if (!file.exists()) {
@@ -347,6 +337,7 @@ public class GameMaster extends Application {
         } catch (FileNotFoundException | JAXBException e) {
             e.printStackTrace();
         }
+
         Label congrats = new Label("Congrats " + winner + ", you won!");
         Button playAgain = new Button("Play again");
         Button exit = new Button("That was enough for us");
@@ -460,16 +451,14 @@ public class GameMaster extends Application {
             Scene lb = new Scene(vBox);
             Button back = new Button("Back");
             LeaderBoard leaderBoard = new LeaderBoard();
-            //Todo olvassa be az xml-t a függvénnyel a duplikált kód helyett
+
             try {
-                FileInputStream fs = new FileInputStream(System.getProperty("user.home")
-                        + "/ColorWar/leaderboard.xml");
-                JAXBContext context = JAXBContext.newInstance(game.LeaderBoard.class);
-                Unmarshaller unmarshaller = context.createUnmarshaller();
-                leaderBoard = (LeaderBoard) unmarshaller.unmarshal(fs);
-            } catch (IOException | JAXBException e) {
+                leaderBoard = JAXBUtil.fromXML(game.LeaderBoard.class, new FileInputStream(System.getProperty("user.home")
+                        + "/ColorWar/leaderboard.xml"));
+            } catch (JAXBException | FileNotFoundException e) {
                 e.printStackTrace();
             }
+
             vBox.getChildren().addAll(leaderBoard.getNameAsNode(), back);
 
 
