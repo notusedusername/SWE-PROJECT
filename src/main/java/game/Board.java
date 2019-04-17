@@ -4,9 +4,7 @@ package game;
 import java.util.ArrayList;
 
 /**
- * A tábla karakteres reprezentációja
- * A mentés-betöltés feature-höz szükséges, illetve a játék
- * kezdetben csak konzolos volt, később kapott grafikát.
+ * A tábla állapotának tárolásáért felelő osztály
  */
 public class Board {
 
