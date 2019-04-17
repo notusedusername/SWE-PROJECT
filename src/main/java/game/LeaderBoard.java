@@ -4,6 +4,8 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -21,19 +23,17 @@ import java.util.stream.Collectors;
 @javax.xml.bind.annotation.XmlRootElement(name = "leaderboard")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class LeaderBoard {
-    /*
-        @XmlElement(name = "name", required = true)
-        private static ArrayList<String> name = new ArrayList<>();
-        @XmlElement(name = "points", required = true)
-        private  static  ArrayList<Integer> counter = new ArrayList<>();
-    */
+
     @XmlElement(name = "player")
     private static Map<String, Integer> ranks = new LinkedHashMap<>();
 
+    private static Logger logger = LoggerFactory.getLogger(LeaderBoard.class);
+
     /**
-     * Egy {@code ScrollPane} tipusu listat ad vissza,
-     * {@code ranks} ID-vel hivatkozható CSS-ből
-     * @return {@code ScrollPane} tipusu gyozteslista
+     * Egy {@code VBox} tipusu listat ad vissza, az 5 legtöbbet nyert játékos nevével
+     * és győzelmeik számával.
+     * {@code ranks} ID-vel hivatkozható CSS-ből a {@code VBox}
+     * @return {@code VBox} tipusu gyozteslista
      */
     VBox getNameAsNode() {
         VBox leaderBoard = new VBox();
@@ -47,6 +47,7 @@ public class LeaderBoard {
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        logger.info("Leaderboard sorted");
         if (ranks.size() > 0) {
             int i = 0;
             for (String s : ranks.keySet()) {
@@ -72,8 +73,10 @@ public class LeaderBoard {
     void addName(String name) {
         if (ranks.containsKey(name)) {
             ranks.put(name, ranks.get(name) + 1);
+            logger.info("Player record updated");
         } else {
             ranks.put(name, 1);
+            logger.info("New player record added");
         }
     }
 }

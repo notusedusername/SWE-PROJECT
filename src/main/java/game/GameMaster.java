@@ -17,6 +17,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -29,6 +31,8 @@ import java.util.ArrayList;
  * A projekt fő osztálya, a az egész játékmenetért felel.
  */
 public class GameMaster extends Application {
+
+    private static Logger logger = LoggerFactory.getLogger(GameMaster.class);
     /**
      * Egy tábla {@code column}. oszlopát adja vissza.
      * Azért van rá szükség, mert a {@code Board} táblát leképező adatszerketete
@@ -118,10 +122,10 @@ public class GameMaster extends Application {
             clickedNode.setStyle("-fx-background-color: "
                     + Color.PLAYER1.getColor()
                     + ";");
-            System.out.println(Color.PLAYER1.getColor());
+            logger.info("{} turn", Color.PLAYER1.getColor());
 
             if (isThereWinner(getColumn(myBoard, y))) {
-                System.out.println(Color.PLAYER1 + " won");
+                logger.info(Color.PLAYER1 + " won");
                 return Winner.PLAYER1;
             }
         } else {
@@ -130,9 +134,9 @@ public class GameMaster extends Application {
             clickedNode.setStyle("-fx-background-color: "
                     + Color.PLAYER2.getColor()
                     + ";");
-            System.out.println(Color.PLAYER2.getColor());
+            logger.info("{} turn", Color.PLAYER2.getColor());
             if (isThereWinner(myBoard.getBoard().get(x))) {
-                System.out.println(Color.PLAYER2 + " won");
+                logger.info(Color.PLAYER2 + " won");
                 return Winner.PLAYER2;
             }
         }
@@ -142,7 +146,7 @@ public class GameMaster extends Application {
     }
 
     private void getPlayerNames(Players players, Stage parent) {
-        System.out.println("Getting playernames");
+        logger.info("Getting playernames");
         Stage playerStage = new Stage();
         playerStage.setTitle("Color War");
         TextField player1 = new TextField();
@@ -211,7 +215,7 @@ public class GameMaster extends Application {
      * @param game A felhasználandó {@code Stage}, ahová rajzolhat
      */
     private void play(Stage game) {
-        System.out.println("Game Starting");
+        logger.info("Game Starting");
 
         Players players = new Players();
         Board myBoard = new Board();
@@ -268,16 +272,16 @@ public class GameMaster extends Application {
         /*
         saveState.setOnMouseClicked(mouseEvent -> {
             //TODO mentés opcionálisan
-            System.out.println("Save gamestate");
+            logger.info();("Save gamestate");
         });
         */
 
         mainMenu.setOnMouseClicked(mouseEvent -> {
-            System.out.println("Back to main menu");
+            logger.info("Back to main menu");
             start(game);
         });
         exitGame.setOnMouseClicked(mouseEvent -> {
-            System.out.println("Exiting");
+            logger.info("Exiting");
             exit();
         });
         GridPane boardUI = drawBoard(myBoard, new GridPane());
@@ -295,11 +299,11 @@ public class GameMaster extends Application {
                 myBoard.getBoard().get(colIndex).get(rowIndex).getColor();
 
             } catch (NullPointerException e) {
-                System.out.println("A játékos a griden kívülre kattintott");
+                logger.info("A játékos a griden kívülre kattintott");
                 return;
             }
             if (myBoard.getBoard().get(colIndex).get(rowIndex).getColor() == Color.NONE) {
-                System.out.println(colIndex + " " + rowIndex);
+                logger.info("x: " + colIndex + " y: " + rowIndex);
                 ofield.setPosition(colIndex, rowIndex);
                 ofield.setClickedNode(clickedNode);
                 writeTurn(playerTurn, players, ofield.getEventCounter());
@@ -341,23 +345,26 @@ public class GameMaster extends Application {
         try {
             leaderBoard = JAXBUtil.fromXML(game.LeaderBoard.class, new FileInputStream(System.getProperty("user.home")
                     + "/ColorWar/leaderboard.xml"));
+            logger.info("Try to read leaderboard.xml");
         } catch (JAXBException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
-            System.out.println("No leaderboard found");
+            logger.info("No leaderboard found");
         }
 
         leaderBoard.addName(winner);
         try {
             File file = new File(System.getProperty("user.home") + "/ColorWar");
+            logger.info("Try to write the new leaderboard state.");
             if (!file.exists()) {
                 if (file.mkdir()) {
-                    System.out.println("New directory");
+                    logger.info("No game directory. Make new directory");
                 } else {
-                    System.out.println("mkdir error");
+                    logger.error("mkdir error");
                 }
             }
             JAXBUtil.toXML(leaderBoard, new FileOutputStream(System.getProperty("user.home") + "/ColorWar/leaderboard.xml"));
+            logger.info("leaderboard.xml updated");
         } catch (FileNotFoundException | JAXBException e) {
             e.printStackTrace();
         }
@@ -379,8 +386,9 @@ public class GameMaster extends Application {
         BorderPane root = new BorderPane();
         root.setTop(congrats);
         BorderPane.setAlignment(congrats, Pos.BOTTOM_LEFT);
-        root.setLeft(leaderBoard.getNameAsNode());
-        BorderPane.setAlignment(leaderBoard.getNameAsNode(), Pos.TOP_CENTER);
+        VBox leaderboard = leaderBoard.getNameAsNode();
+        root.setLeft(leaderboard);
+        BorderPane.setAlignment(leaderboard, Pos.TOP_CENTER);
         root.setRight(shrekview);
         BorderPane.setAlignment(shrekview, Pos.TOP_CENTER);
         root.setBottom(bottom);
@@ -436,11 +444,11 @@ public class GameMaster extends Application {
 
 
         ok.setOnMouseClicked(mouseEvent -> {
-            System.out.println("Ensured");
+            logger.info("Exit Ensured");
             System.exit(0);
         });
         cancel.setOnMouseClicked(mouseEvent -> {
-            System.out.println("Cancelled");
+            logger.info("Exit Cancelled");
             dialog.close();
         });
         dialog.setScene(scene);
@@ -478,12 +486,12 @@ public class GameMaster extends Application {
 
         menuRoot.setPrefSize(720, 1280);
         startGame.setOnMouseClicked(mouseEvent -> {
-            System.out.println("Starting a new game...");
+            logger.info("Starting a new game...");
             Players players = new Players();
             getPlayerNames(players, primaryStage);
         });
         winners.setOnMouseClicked(mouseEvent -> {
-            System.out.println("Winners");
+            logger.info("Enter Winners Menu");
             Label leaders = new Label("Leaderboard");
             leaders.setId("leaders");
             VBox vBox = new VBox();
@@ -512,7 +520,7 @@ public class GameMaster extends Application {
 
         });
         exitGame.setOnMouseClicked(mouseEvent -> {
-            System.out.println("Exiting");
+            logger.info("Exiting");
             exit();
         });
 
