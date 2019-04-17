@@ -10,7 +10,7 @@
     -fx-text-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, blue 0%, red 70%);
 }
 
-.button:hover, #winners .label {
+.button:hover, #winners .label, #ranks .label {
     -fx-text-fill: black;
     -fx-effect: dropshadow(three-pass-box, rgba(182, 0, 16, 0.94), 20, 0, 5, 5);
 }
@@ -40,7 +40,7 @@
 
 }
 
-.button, #mainmenu .label, #playtitle {
+.button, #mainmenu .label, #playtitle, #leaders {
     -fx-font-family: "Slim Play";
 }
 
@@ -49,6 +49,6 @@
     -fx-font-weight: bold;
 }
 
-#title, #congrats {
+#title, #congrats, #leaders {
     -fx-font-size: 70;
 }

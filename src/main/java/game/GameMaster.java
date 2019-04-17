@@ -217,14 +217,12 @@ public class GameMaster extends Application {
         Board myBoard = new Board();
         OccupiedPosition ofield = new OccupiedPosition();
         BorderPane root = new BorderPane();
-        GridPane boardUI = new GridPane();
         Scene scene = new Scene(root);
         scene.getStylesheets().add("styles/Styles.css");
         Label title = new Label("Color War");
 
         title.setId("playtitle");
 
-        root.setCenter(boardUI);
         root.setPrefSize(720, 1280);
         //Button saveState = new Button("Save");
         Button mainMenu = new Button("Back to Main Menu");
@@ -261,8 +259,11 @@ public class GameMaster extends Application {
         Label playerTurn = new Label(players.getPlayer("PLAYER1") + "'s turn");
         playerTurn.setStyle(
                 "    -fx-text-fill: navy;");
-        root.setTop(playerTurn);
-        playerTurn.setId("turn");
+        HBox turn = new HBox(playerTurn);
+        turn.setAlignment(Pos.CENTER_RIGHT);
+        turn.minWidth(root.getPrefWidth());
+        root.setTop(turn);
+        turn.setId("turn");
         BorderPane.setAlignment(playerTurn, Pos.CENTER_RIGHT);
         /*
         saveState.setOnMouseClicked(mouseEvent -> {
@@ -279,10 +280,11 @@ public class GameMaster extends Application {
             System.out.println("Exiting");
             exit();
         });
+        GridPane boardUI = drawBoard(myBoard, new GridPane());
+        root.setCenter(boardUI);
         boardUI.setMinSize(660, 660);
         boardUI.setMaxSize(660, 660);
         boardUI.setGridLinesVisible(true);
-        boardUI = drawBoard(myBoard, boardUI);
 
 
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
@@ -291,8 +293,9 @@ public class GameMaster extends Application {
             Integer rowIndex = GridPane.getRowIndex(clickedNode);
             try {
                 myBoard.getBoard().get(colIndex).get(rowIndex).getColor();
+
             } catch (NullPointerException e) {
-                // A játékos a griden kívülre kattint
+                System.out.println("A játékos a griden kívülre kattintott");
                 return;
             }
             if (myBoard.getBoard().get(colIndex).get(rowIndex).getColor() == Color.NONE) {
@@ -338,15 +341,21 @@ public class GameMaster extends Application {
         try {
             leaderBoard = JAXBUtil.fromXML(game.LeaderBoard.class, new FileInputStream(System.getProperty("user.home")
                     + "/ColorWar/leaderboard.xml"));
-        } catch (JAXBException | FileNotFoundException e) {
+        } catch (JAXBException e) {
             e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            System.out.println("No leaderboard found");
         }
 
         leaderBoard.addName(winner);
         try {
             File file = new File(System.getProperty("user.home") + "/ColorWar");
             if (!file.exists()) {
-                file.mkdir();
+                if (file.mkdir()) {
+                    System.out.println("New directory");
+                } else {
+                    System.out.println("mkdir error");
+                }
             }
             JAXBUtil.toXML(leaderBoard, new FileOutputStream(System.getProperty("user.home") + "/ColorWar/leaderboard.xml"));
         } catch (FileNotFoundException | JAXBException e) {
@@ -475,6 +484,8 @@ public class GameMaster extends Application {
         });
         winners.setOnMouseClicked(mouseEvent -> {
             System.out.println("Winners");
+            Label leaders = new Label("Leaderboard");
+            leaders.setId("leaders");
             VBox vBox = new VBox();
             vBox.setId("winners");
             Scene lb = new Scene(vBox);
@@ -489,13 +500,11 @@ public class GameMaster extends Application {
                 e.printStackTrace();
             }
 
-            vBox.getChildren().addAll(leaderBoard.getNameAsNode(), back);
+            vBox.getChildren().addAll(leaders, leaderBoard.getNameAsNode(), back);
             vBox.setSpacing(5);
             vBox.setAlignment(Pos.CENTER);
 
-            back.setOnMouseClicked(mouseEvent1 -> {
-                start(primaryStage);
-            });
+            back.setOnMouseClicked(mouseEvent1 -> start(primaryStage));
             primaryStage.setScene(lb);
             primaryStage.setFullScreen(true);
             primaryStage.setFullScreenExitHint("");
