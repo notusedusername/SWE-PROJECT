@@ -1,6 +1,7 @@
 package game;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -51,9 +52,24 @@ public class LeaderBoard {
         if (ranks.size() > 0) {
             int i = 0;
             for (String s : ranks.keySet()) {
-                leaderBoard.getChildren().add(new HBox(new Label("\t" + s + ranks.get(s))));
+                Label name = new Label(s);
+                Label wins = new Label(ranks.get(s).toString());
+                HBox left = new HBox(name);
+                HBox right = new HBox(wins);
+                left.setMinWidth(300);
+                right.setMinWidth(300);
+                left.setAlignment(Pos.CENTER_RIGHT);
+                right.setAlignment(Pos.CENTER_RIGHT);
+
+                if (i == 0) {
+                    name.setText("Name");
+                    wins.setText("Wins");
+                    name.setStyle("-fx-underline: true; -fx-font-style: italic;");
+                    wins.setStyle("-fx-underline: true; -fx-font-style: italic;");
+                }
+                leaderBoard.getChildren().add(new HBox(left, right));
                 i++;
-                if (i == 4) {
+                if (i == 5) {
                     break;
                 }
             }
