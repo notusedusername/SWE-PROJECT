@@ -48,7 +48,9 @@ public class LeaderBoard {
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
         logger.info("Leaderboard sorted");
+
         if (ranks.size() > 0) {
             int i = 0;
             for (String s : ranks.keySet()) {
@@ -61,12 +63,6 @@ public class LeaderBoard {
                 left.setAlignment(Pos.CENTER_RIGHT);
                 right.setAlignment(Pos.CENTER_RIGHT);
 
-                if (i == 0) {
-                    name.setText("Name");
-                    wins.setText("Wins");
-                    name.setStyle("-fx-underline: true; -fx-font-style: italic;");
-                    wins.setStyle("-fx-underline: true; -fx-font-style: italic;");
-                }
                 leaderBoard.getChildren().add(new HBox(left, right));
                 i++;
                 if (i == 5) {
