@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<BorderPane fx:id="root"
+            id="boardBackground"
+            prefHeight="676.0"
+            prefWidth="1280"
+            xmlns="http://javafx.com/javafx/8.0.172-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="game.GameController">
+    <left>
+        <VBox id="game" spacing="25.0">
+            <Button id="backToMain" fx:id="backToMain" onAction="#backToMain" text="Back to Main Menu"/>
+            <Button fx:id="exit" onAction="#exit" text="Exit"/>
+            <Label fx:id="playerList" text="Player List"/>
+            <VBox>
+                <Label id="p1OnList" fx:id="p1Name"/>
+                <Label id="p2OnList" fx:id="p2Name"/>
+            </VBox>
+        </VBox>
+    </left>
+    <top>
+        <Label id="turn" fx:id="playerTurn" prefHeight="56.0" prefWidth="1394.0" BorderPane.alignment="TOP_RIGHT"/>
+    </top>
+    <center>
+        <GridPane fx:id="board"
+                  id="board"
+                  alignment="CENTER"
+                  gridLinesVisible="true"
+                  BorderPane.alignment="CENTER"
+                  minHeight="500"
+                  minWidth="500"
+                  onMouseClicked="#gridClicked">
+
+        </GridPane>
+    </center>
+    <stylesheets>
+        <URL value="@/styles/Styles.css"/>
+    </stylesheets>
+</BorderPane>

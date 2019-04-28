@@ -37,6 +37,7 @@ public class LeaderBoard {
      * @return {@code VBox} tipusu gyozteslista
      */
     VBox getNameAsNode() {
+
         VBox leaderBoard = new VBox();
         leaderBoard.setId("ranks");
         leaderBoard.setPadding(new Insets(5));

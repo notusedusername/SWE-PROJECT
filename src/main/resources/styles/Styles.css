@@ -52,3 +52,20 @@
 #title, #congrats, #leaders {
     -fx-font-size: 70;
 }
+
+#warning {
+    -fx-text-fill: red;
+}
+
+#p1OnList {
+    -fx-text-fill: navy;
+}
+
+#p2OnList {
+    -fx-text-fill: #c90000
+
+}
+
+#boardBackground {
+    -fx-background-color: gray;
+}

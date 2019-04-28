@@ -540,8 +540,9 @@ public class GameMaster extends Application {
         }
         Scene scene = new Scene(root);
         scene.getStylesheets().add("styles/Styles.css");
-        primaryStage.setTitle("FXML Welcome");
+        primaryStage.setTitle("ColorWar");
         primaryStage.setFullScreen(true);
+        primaryStage.setFullScreenExitHint("");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

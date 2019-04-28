@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+<BorderPane id="winners" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="game.WinnerController">
+    <center>
+        <VBox id="leaderboard" fx:id="leaderboard" alignment="CENTER" BorderPane.alignment="CENTER"/>
+    </center>
+    <bottom>
+        <Button fx:id="BackButton" onAction="#backToMain" text="Back"/>
+    </bottom>
+    <stylesheets>
+        <URL value="@/styles/Styles.css"/>
+    </stylesheets>
+</BorderPane>

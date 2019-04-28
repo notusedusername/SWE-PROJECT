@@ -4,26 +4,23 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="game.MainMenuController"
-            id="mainmenu"
-            fx:id="mainmenu">
+<?import java.net.URL?>
+<BorderPane id="mainmenu" fx:id="mainmenu" prefHeight="657.0" prefWidth="1629.0"
+            xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="game.MainMenuController">
     <left>
-        <Label text="Color War"
-               fx:id="title"
-               id="title"
-               BorderPane.alignment="CENTER_RIGHT"/>
+        <Label id="title" fx:id="title" text="Color War" BorderPane.alignment="CENTER_RIGHT"/>
     </left>
     <center>
-        <VBox
-                fillWidth="true"
-                alignment="CENTER">
-            <Button fx:id="startbutton" text="New Game" onAction="#startGame"/>
-            <Button fx:id="winnersbutton" text="Winners" onAction="#showWinners"/>
-            <Button fx:id="exitbutton" text="Exit" onAction="#exit"/>
+        <VBox alignment="CENTER" BorderPane.alignment="BOTTOM_CENTER">
+            <Button fx:id="startbutton" onAction="#startGame" text="New Game"/>
+            <Button fx:id="winnersbutton" onAction="#showWinners" text="Winners"/>
+            <Button fx:id="exitbutton" onAction="#exit" text="Exit"/>
         </VBox>
     </center>
+    <stylesheets>
+        <URL value="@/styles/Styles.css"/>
+    </stylesheets>
 
 
 </BorderPane>

@@ -22,7 +22,7 @@ public class OccupiedPosition {
      * {@code setEventCounter(Integer eventCounter)} segítségével változtatja az értéket,
      * ezért nem {@code static}.
      */
-    private int eventCounter;
+    private static int eventCounter;
 
     public int getEventCounter() {
         return eventCounter;

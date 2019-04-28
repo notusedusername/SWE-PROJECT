@@ -17,15 +17,11 @@ public class JAXBUtil {
      * @throws JAXBException ha bármi probléma van a folyamat során
      */
     public static void toXML(Object o, OutputStream os) throws JAXBException {
-        try {
-            JAXBContext context = JAXBContext.newInstance(o.getClass());
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-            marshaller.marshal(o, os);
-        } catch (JAXBException e) {
-            throw e;
-        }
+        JAXBContext context = JAXBContext.newInstance(o.getClass());
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+        marshaller.marshal(o, os);
     }
 
     /**
@@ -37,13 +33,9 @@ public class JAXBUtil {
      * @throws JAXBException ha bármi probléma van a beolvasás során
      */
     public static <T> T fromXML(Class<T> clazz, InputStream is) throws JAXBException {
-        try {
-            JAXBContext context = JAXBContext.newInstance(clazz);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            return (T) unmarshaller.unmarshal(is);
-        } catch (JAXBException e) {
-            throw e;
-        }
+        JAXBContext context = JAXBContext.newInstance(clazz);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        return (T) unmarshaller.unmarshal(is);
     }
 
 }
