@@ -2,10 +2,12 @@ package game;
 
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
@@ -21,10 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -419,7 +418,7 @@ public class GameMaster extends Application {
      * ekkor ez az új ablak bezár és semmi sem történik; ha megerősítjük a
      * program {@code System.exit(0)} paranccsal kilép.
      */
-    private void exit() {
+    protected static void exit() {
         Stage dialog = new Stage();
         dialog.setTitle("You are about to exit");
         BorderPane root = new BorderPane();
@@ -459,13 +458,13 @@ public class GameMaster extends Application {
      *
      * @param primaryStage A fő programablak
      */
-    @Override
+    /*@Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Color War");
         BorderPane menuRoot = new BorderPane();
         menuRoot.setId("mainmenu");
         VBox menu = new VBox();
-        Scene scene = new Scene(menuRoot, javafx.scene.paint.Color.BLACK);
+        Scene scene = new Scene(menuRoot);
 
         scene.getStylesheets().add("styles/Styles.css");
 
@@ -531,7 +530,21 @@ public class GameMaster extends Application {
 
 
     }
-
+*/
+    public void start(Stage primaryStage) {
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/MainMenu.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("styles/Styles.css");
+        primaryStage.setTitle("FXML Welcome");
+        primaryStage.setFullScreen(true);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be
