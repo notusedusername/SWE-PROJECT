@@ -3,28 +3,13 @@ package game;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.JAXBException;
-import java.io.*;
-import java.util.ArrayList;
+import java.io.IOException;
 
 /**
  * A projekt fő osztálya, a az egész játékmenetért felel.
@@ -32,7 +17,8 @@ import java.util.ArrayList;
 public class GameMaster extends Application {
 
     private static Logger logger = LoggerFactory.getLogger(GameMaster.class);
-    /**
+    /*
+     *//**
      * Egy tábla {@code column}. oszlopát adja vissza.
      * Azért van rá szükség, mert a {@code Board} táblát leképező adatszerketete
      * egy {@code ArrayList<ArrayList<Field>>}, aminek csak a sorát kérhetjük le
@@ -41,7 +27,7 @@ public class GameMaster extends Application {
      * @param myBoard {@code Board} típusú objektum, a bemeneti tábla
      * @param column  a tábla adott oszlopindexe
      * @return {@code ArrayList<Field>} érték, a tábla egy oszlopa
-     */
+     *//*
     private ArrayList<Field> getColumn(Board myBoard, int column) {
         ArrayList<Field> toReturn = new ArrayList<>();
         for (int i = 0; i < myBoard.getBoard().size(); i++) {
@@ -50,13 +36,13 @@ public class GameMaster extends Application {
         return toReturn;
     }
 
-    /**
+    *//**
      * Megvizsgálja, hogy az adott {@code Field}-eket tartalmazó lista
      * elemei egyszínűek-e.
      *
      * @param fields A {@code Field} típusú lista
      * @return Ha mind egyszínű igaz, egyébként hamis.
-     */
+     *//*
     private boolean isThereWinner(ArrayList<Field> fields) {
 
         Color previous = Color.NONE;
@@ -76,13 +62,13 @@ public class GameMaster extends Application {
         return true;
     }
 
-    /**
+    *//**
      * A tábla grafikus reprezentációjáért felel.
      *
      * @param myBoard A kirajzolandó tábla mátrixa
      * @param boardUI A kitöltendő grafikus elem ({@code GridPane}
      * @return A kitöltött {@code Gridpane} elem.
-     */
+     *//*
     private GridPane drawBoard(Board myBoard, GridPane boardUI) {
         for (int i = 0; i < myBoard.getBoard().size(); i++) {
             for (int j = 0; j < myBoard.getBoard().get(i).size(); j++) {
@@ -97,7 +83,7 @@ public class GameMaster extends Application {
         return boardUI;
     }
 
-    /**
+    *//**
      * A táblán a játékosok által "elfoglalt" mezőket színezi át a megfelelő színűre.
      *
      * @param event   Számolja a mezőfogalási eseményeket (fontos, hogy tudjuk ki lép)
@@ -106,7 +92,7 @@ public class GameMaster extends Application {
      * @param region  A {@code Stage}, ahol a tábla elhelyezkedik (változtatja a háttér színét az
      *                aktív játékos alapján.
      * @return A nyertes játékos
-     */
+     *//*
     private Winner changeColor(int event, OccupiedPosition ofield, Board myBoard, BorderPane region) {
 
         if (ofield.isTheBoardFull(myBoard)) {
@@ -208,11 +194,11 @@ public class GameMaster extends Application {
         }
     }
 
-    /**
+    *//**
      * Megjeleníti a játékablakot a táblával és a {@code sideMenu}-vel.
      *
      * @param game A felhasználandó {@code Stage}, ahová rajzolhat
-     */
+     *//*
     private void play(Stage game) {
         logger.info("Game Starting");
 
@@ -268,12 +254,12 @@ public class GameMaster extends Application {
         root.setTop(turn);
         turn.setId("turn");
         BorderPane.setAlignment(playerTurn, Pos.CENTER_RIGHT);
-        /*
+        *//*
         saveState.setOnMouseClicked(mouseEvent -> {
             //TODO mentés opcionálisan
             logger.info();("Save gamestate");
         });
-        */
+        *//*
 
         mainMenu.setOnMouseClicked(mouseEvent -> {
             logger.info("Back to main menu");
@@ -328,14 +314,14 @@ public class GameMaster extends Application {
         game.show();
     }
 
-    /**
+    *//**
      * Egy felugró ablakkal jelzi, hogy a játék véget ért,
      * kiírja a nyertest, és felajánlja a kilépést, vagy új játékot.
      *
      * @param winner A nyertes neve {@code String}-ként
      * @param parent A létrehozó {@code Stage}, mert új játék indításakor
      *               ezt is bezárja.
-     */
+     *//*
     private void printWinner(String winner, Stage parent) {
         Stage winnerScreen = new Stage();
         winnerScreen.setTitle("Winner");
@@ -413,11 +399,11 @@ public class GameMaster extends Application {
         winnerScreen.show();
     }
 
-    /**
+    *//**
      * Egy felugró ablakot hoz létre, felkínálja a visszalépést,
      * ekkor ez az új ablak bezár és semmi sem történik; ha megerősítjük a
      * program {@code System.exit(0)} paranccsal kilép.
-     */
+     *//*
     protected static void exit() {
         Stage dialog = new Stage();
         dialog.setTitle("You are about to exit");
@@ -453,12 +439,14 @@ public class GameMaster extends Application {
         dialog.setScene(scene);
     }
 
+    */
+
     /**
      * Elindítja a program futását, létrehozza a főmenüt.
      *
      * @param primaryStage A fő programablak
-     */
-    /*@Override
+     *//*
+     *//*@Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Color War");
         BorderPane menuRoot = new BorderPane();
@@ -504,6 +492,7 @@ public class GameMaster extends Application {
                 leaderBoard = JAXBUtil.fromXML(game.LeaderBoard.class, new FileInputStream(System.getProperty("user.home")
                         + "/ColorWar/leaderboard.xml"));
             } catch (JAXBException | FileNotFoundException e) {
+                e.printStackTrace();
                 e.printStackTrace();
             }
 

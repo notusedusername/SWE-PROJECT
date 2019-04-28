@@ -19,8 +19,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import static game.GameMaster.exit;
-
 public class GameUtils {
     private static Logger logger = LoggerFactory.getLogger(GameUtils.class);
 
@@ -76,7 +74,6 @@ public class GameUtils {
         Color previous = Color.NONE;
 
         for (int i = 0; i < fields.size(); i++) {
-            System.out.println(fields.get(i).getColor());
             if (i == 0) {
                 previous = fields.get(i).getColor();
                 //continue;
@@ -209,7 +206,7 @@ public class GameUtils {
             //play(new Stage());
             parent.close();
         });
-        exit.setOnMouseClicked(mouseEvent -> exit());
+        //exit.setOnMouseClicked(mouseEvent -> exit());
 
         if (winner.equals("TIE")) {
             congrats.setText("Do you know how to play??\n It's a tie.");

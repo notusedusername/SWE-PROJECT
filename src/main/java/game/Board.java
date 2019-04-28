@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Board {
 
-    private static ArrayList<ArrayList<Field>> board = new ArrayList<>();
+    private ArrayList<ArrayList<Field>> board = new ArrayList<>();
 
     /**
      * A tábla kezdeti állapota

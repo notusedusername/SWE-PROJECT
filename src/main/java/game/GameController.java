@@ -30,9 +30,10 @@ public class GameController {
     @FXML
     Label playerTurn;
 
+    Board myBoard = new Board();
+
     @FXML
     void initialize() {
-        Board myBoard = new Board();
         board = GameUtils.drawBoard(myBoard, board);
         p1Name.setText(Players.getPlayer("PLAYER1") + "\n (Horizontal)");
         p2Name.setText(Players.getPlayer("PLAYER2") + "\n (Vertical)");
@@ -40,6 +41,7 @@ public class GameController {
 
     @FXML
     protected void backToMain() {
+
         Scene scene = board.getScene();
         Parent root = null;
         try {
@@ -60,7 +62,6 @@ public class GameController {
         Node clickedNode = mouseEvent.getPickResult().getIntersectedNode();
         Integer colIndex = GridPane.getColumnIndex(clickedNode);
         Integer rowIndex = GridPane.getRowIndex(clickedNode);
-        Board myBoard = new Board();
         Players players = new Players();
         OccupiedPosition ofield = new OccupiedPosition();
         try {
@@ -76,6 +77,7 @@ public class GameController {
             ofield.setClickedNode(clickedNode);
             GameUtils.writeTurn(playerTurn, players, ofield.getEventCounter());
             String winner = GameUtils.changeColor(ofield.getEventCounter(), ofield, myBoard, root).toString();
+            System.out.println(myBoard.toString());
             if (!winner.equals("NONE")) {
                 if (winner.equals("TIE")) {
                     GameUtils.printWinner(winner, (Stage) root.getScene().getWindow());
