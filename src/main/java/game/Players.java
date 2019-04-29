@@ -14,7 +14,7 @@ public class Players {
      * @param player A játékos program által használt neve {@code (PLAYER1, PLAYER2)}
      * @return a kért játékos nickneve
      */
-    static String getPlayer(String player) {
+    public static String getPlayer(String player) {
         if (player.equals("PLAYER1")) {
             return players.get(0);
         } else {
@@ -28,7 +28,7 @@ public class Players {
      * @param player1 A {@code PLAYER1} neve
      * @param player2 A {@code PLAYER2} neve
      */
-    static void setPlayer(String player1, String player2) {
+    public static void setPlayer(String player1, String player2) {
         players.add(0, player1);
         players.add(1, player2);
     }

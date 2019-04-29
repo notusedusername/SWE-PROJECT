@@ -36,7 +36,7 @@ public class LeaderBoard {
      * {@code ranks} ID-vel hivatkozható CSS-ből a {@code VBox}
      * @return {@code VBox} tipusu gyozteslista
      */
-    VBox getNameAsNode() {
+    public VBox getNameAsNode() {
 
         VBox leaderBoard = new VBox();
         leaderBoard.setId("ranks");
@@ -83,15 +83,19 @@ public class LeaderBoard {
      *
      * @param name A hozzaadando nev
      */
-    void addName(String name) {
-        if (ranks.containsKey(name)) {
-            ranks.put(name, ranks.get(name) + 1);
-            logger.info("Player record updated");
-        } else {
-            ranks.put(name, 1);
-            logger.info("New player record added");
+    public void addName(String name) {
+        if (!name.equals("TIE")) {
+            if (ranks.containsKey(name)) {
+                ranks.put(name, ranks.get(name) + 1);
+                logger.info("Player record updated");
+            } else {
+                ranks.put(name, 1);
+                logger.info("New player record added");
+            }
+
         }
     }
+
 }
 
 

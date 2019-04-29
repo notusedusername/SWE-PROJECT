@@ -1,5 +1,6 @@
-package game;
+package controller;
 
+import game.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -9,16 +10,16 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.io.*;
+
 
 
 public class GameController {
 
-    private static Logger logger = LoggerFactory.getLogger(GameUtils.class);
+    private static Logger logger = LoggerFactory.getLogger(GameController.class);
     @FXML
     GridPane board;
     @FXML
@@ -30,7 +31,7 @@ public class GameController {
     @FXML
     Label playerTurn;
 
-    Board myBoard = new Board();
+    private Board myBoard = new Board();
 
     @FXML
     void initialize() {
@@ -62,7 +63,6 @@ public class GameController {
         Node clickedNode = mouseEvent.getPickResult().getIntersectedNode();
         Integer colIndex = GridPane.getColumnIndex(clickedNode);
         Integer rowIndex = GridPane.getRowIndex(clickedNode);
-        Players players = new Players();
         OccupiedPosition ofield = new OccupiedPosition();
         try {
             myBoard.getBoard().get(colIndex).get(rowIndex).getColor();
@@ -75,17 +75,30 @@ public class GameController {
             logger.info("x: " + colIndex + " y: " + rowIndex);
             ofield.setPosition(colIndex, rowIndex);
             ofield.setClickedNode(clickedNode);
-            GameUtils.writeTurn(playerTurn, players, ofield.getEventCounter());
+            GameUtils.writeTurn(playerTurn, ofield.getEventCounter());
             String winner = GameUtils.changeColor(ofield.getEventCounter(), ofield, myBoard, root).toString();
-            System.out.println(myBoard.toString());
             if (!winner.equals("NONE")) {
-                if (winner.equals("TIE")) {
-                    GameUtils.printWinner(winner, (Stage) root.getScene().getWindow());
-                } else {
-                    GameUtils.printWinner(players.getPlayer(winner), (Stage) root.getScene().getWindow());
-                }
+                switchStage(winner);
             }
         }
 
+    }
+
+    @FXML
+    private void switchStage(String winner) {
+
+        Scene scene = board.getScene();
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/WinnerPopUp.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        scene.setRoot(root);
+        if (winner.equals("TIE")) {
+            new WinnerPUController().printWinner(winner);
+        } else {
+            new WinnerPUController().printWinner(Players.getPlayer(winner));
+        }
     }
 }

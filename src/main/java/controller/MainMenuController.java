@@ -1,4 +1,4 @@
-package game;
+package controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +31,7 @@ public class MainMenuController {
         Scene scene = startbutton.getScene();
         Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/WinnerScreen.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxml/Winners.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }

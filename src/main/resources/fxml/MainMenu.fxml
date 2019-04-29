@@ -7,7 +7,7 @@
 <?import java.net.URL?>
 <BorderPane id="mainmenu" fx:id="mainmenu" prefHeight="657.0" prefWidth="1629.0"
             xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="game.MainMenuController">
+            fx:controller="controller.MainMenuController">
     <left>
         <Label id="title" fx:id="title" text="Color War" BorderPane.alignment="CENTER_RIGHT"/>
     </left>

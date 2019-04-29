@@ -1,32 +1,24 @@
-package game;
+package controller;
 
+import game.LeaderBoard;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
-
-import javax.xml.bind.JAXBException;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 public class WinnerController {
+
+    private static Logger logger = LoggerFactory.getLogger(WinnerController.class);
     @FXML
-    VBox leaderboard = null;
+    VBox leaderboard;
 
     @FXML
     public void initialize() {
-        LeaderBoard ranks = new LeaderBoard();
-        try {
-            ranks = JAXBUtil.fromXML(game.LeaderBoard.class, new FileInputStream(System.getProperty("user.home")
-                    + "/ColorWar/leaderboard.xml"));
-            //logger.info("Try to read leaderboard.xml"); todo
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            //logger.info("No leaderboard found");
-        }
+        LeaderBoard ranks = JAXBUtil.read(logger);
         leaderboard.getChildren().add(ranks.getNameAsNode());
     }
 

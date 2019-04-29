@@ -1,5 +1,6 @@
-package game;
+package controller;
 
+import game.Players;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

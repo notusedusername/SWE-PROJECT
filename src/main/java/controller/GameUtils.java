@@ -1,22 +1,12 @@
-package game;
+package controller;
 
-import javafx.geometry.Pos;
+
+import game.*;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.xml.bind.JAXBException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class GameUtils {
@@ -87,6 +77,16 @@ public class GameUtils {
         return true;
     }
 
+    /**
+     * A táblán a játékosok által "elfoglalt" mezőket színezi át a megfelelő színűre.
+     *
+     * @param event   Számolja a mezőfogalási eseményeket (fontos, hogy tudjuk ki lép)
+     * @param ofield  A bekattinott {@code Node} elem
+     * @param myBoard A jelenlegi játéktábla
+     * @param region  A {@code Stage}, ahol a tábla elhelyezkedik (változtatja a háttér színét az
+     *                aktív játékos alapján.
+     * @return A nyertes játékos
+     */
     static Winner changeColor(int event, OccupiedPosition ofield, Board myBoard, BorderPane region) {
 
         if (ofield.isTheBoardFull(myBoard)) {
@@ -124,98 +124,19 @@ public class GameUtils {
         return Winner.NONE;
     }
 
-    static void writeTurn(Label turn, Players players, int event) {
+    /**
+     * Az éppen következő játékos nevének megjelenését
+     *
+     * @param turn  a módosítandó {@code Label }
+     * @param event az eseményszám, amiből a soron következő játékost számoljuk
+     */
+    static void writeTurn(Label turn, int event) {
         if (event % 2 == 1) {
-            turn.setText(players.getPlayer("PLAYER1") + "'s turn");
+            turn.setText(Players.getPlayer("PLAYER1") + "'s turn");
             turn.setStyle("-fx-text-fill: navy;");
         } else {
-            turn.setText(players.getPlayer("PLAYER2") + "'s turn");
+            turn.setText(Players.getPlayer("PLAYER2") + "'s turn");
             turn.setStyle("-fx-text-fill: #c90000 ;");
         }
-    }
-
-    /**
-     * Egy felugró ablakkal jelzi, hogy a játék véget ért,
-     * kiírja a nyertest, és felajánlja a kilépést, vagy új játékot.
-     *
-     * @param winner A nyertes neve {@code String}-ként
-     * @param parent A létrehozó {@code Stage}, mert új játék indításakor
-     *               ezt is bezárja.
-     */
-    static void printWinner(String winner, Stage parent) {
-        Stage winnerScreen = new Stage();
-        winnerScreen.setTitle("Winner");
-        LeaderBoard leaderBoard = new LeaderBoard();
-
-        try {
-            leaderBoard = JAXBUtil.fromXML(game.LeaderBoard.class, new FileInputStream(System.getProperty("user.home")
-                    + "/ColorWar/leaderboard.xml"));
-            logger.info("Try to read leaderboard.xml");
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            logger.info("No leaderboard found");
-        }
-
-        leaderBoard.addName(winner);
-        try {
-            File file = new File(System.getProperty("user.home") + "/ColorWar");
-            logger.info("Try to write the new leaderboard state.");
-            if (!file.exists()) {
-                if (file.mkdir()) {
-                    logger.info("No game directory. Make new directory");
-                } else {
-                    logger.error("mkdir error");
-                }
-            }
-            JAXBUtil.toXML(leaderBoard, new FileOutputStream(System.getProperty("user.home") + "/ColorWar/leaderboard.xml"));
-            logger.info("leaderboard.xml updated");
-        } catch (FileNotFoundException | JAXBException e) {
-            e.printStackTrace();
-        }
-
-        Label congrats = new Label("Congrats " + winner + ", you won!");
-        Button playAgain = new Button("Play again");
-        Button exit = new Button("That was enough for us");
-
-        Image shrek = new Image("styles/shrek.jpg");
-        ImageView shrekview = new ImageView(shrek);
-
-        congrats.prefWidth(50);
-        congrats.setWrapText(true);
-        congrats.setId("congrats");
-
-
-        HBox bottom = new HBox();
-        bottom.getChildren().addAll(playAgain, exit);
-        BorderPane root = new BorderPane();
-        root.setTop(congrats);
-        BorderPane.setAlignment(congrats, Pos.BOTTOM_LEFT);
-        VBox leaderboard = leaderBoard.getNameAsNode();
-        root.setLeft(leaderboard);
-        BorderPane.setAlignment(leaderboard, Pos.TOP_CENTER);
-        root.setRight(shrekview);
-        BorderPane.setAlignment(shrekview, Pos.TOP_CENTER);
-        root.setBottom(bottom);
-        bottom.setAlignment(Pos.BOTTOM_RIGHT);
-        BorderPane.setAlignment(bottom, Pos.BOTTOM_RIGHT);
-
-        root.setId("winnerscreen");
-        playAgain.setOnMouseClicked(mouseEvent -> {
-            winnerScreen.close();
-            //play(new Stage());
-            parent.close();
-        });
-        //exit.setOnMouseClicked(mouseEvent -> exit());
-
-        if (winner.equals("TIE")) {
-            congrats.setText("Do you know how to play??\n It's a tie.");
-        }
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add("styles/Styles.css");
-        winnerScreen.setFullScreen(true);
-        winnerScreen.setFullScreenExitHint("");
-        winnerScreen.setScene(scene);
-        winnerScreen.show();
     }
 }
