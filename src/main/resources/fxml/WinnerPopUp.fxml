@@ -15,7 +15,7 @@
         <Label id="congrats" fx:id="congrats" prefHeight="85.0" prefWidth="345.0" wrapText="true"/>
     </top>
     <left>
-        <VBox fx:id="leaderboard" prefHeight="629.0" prefWidth="400"/>
+        <VBox fx:id="fxleaderboard" prefHeight="629.0" prefWidth="400"/>
     </left>
     <right>
         <ImageView fx:id="image" BorderPane.alignment="TOP_RIGHT">

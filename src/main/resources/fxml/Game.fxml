@@ -12,6 +12,7 @@
             fx:controller="controller.GameController">
     <left>
         <VBox id="game" spacing="25.0">
+            <Label text="Color War" id="playtitle"/>
             <Button id="backToMain" fx:id="backToMain" onAction="#backToMain" text="Back to Main Menu"/>
             <Button fx:id="exit" onAction="#exit" text="Exit"/>
             <Label fx:id="playerList" text="Player List"/>

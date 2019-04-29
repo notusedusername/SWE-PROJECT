@@ -57,7 +57,7 @@
     -fx-text-fill: red;
 }
 
-#p1OnList {
+#p1OnList, #turn {
     -fx-text-fill: navy;
 }
 

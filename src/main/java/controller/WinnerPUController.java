@@ -1,6 +1,7 @@
 package controller;
 
 import game.LeaderBoard;
+import game.Players;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,33 +18,26 @@ public class WinnerPUController {
     private static Logger logger = LoggerFactory.getLogger(WinnerPUController.class);
 
     @FXML
-    VBox leaderboard;
+    VBox fxleaderboard;
     @FXML
     Label congrats;
-
+    private String winner;
+    private LeaderBoard leaderboard;
 
     @FXML
-    protected void printWinner(String winner) {//todo
-        LeaderBoard leaderBoard = JAXBUtil.read(logger);
-
-        leaderBoard.addName(winner);
-
-        JAXBUtil.write(leaderBoard, logger);
-
-        leaderboard.getChildren().add(leaderBoard.getNameAsNode());
-
+    void initialize() {
+        fxleaderboard.getChildren().add(leaderboard.getNameAsNode());
         if (winner.equals("TIE")) {
             congrats.setText("Do you know how to play??\n It's a tie.");
         } else {
-            String text = "Congrats" + winner + ", you won!";
+            String text = "Congrats" + Players.getPlayer(winner) + ", you won!";
             congrats.setText(text);
         }
-
     }
 
     @FXML
     public void playAgain() {
-        Scene scene = leaderboard.getScene();
+        Scene scene = fxleaderboard.getScene();
         Parent root = null;
         try {
             root = FXMLLoader.load(getClass().getResource("/fxml/Game.fxml"));
@@ -56,5 +50,13 @@ public class WinnerPUController {
     @FXML
     public void exit() {
         new MainMenuController().exit();
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
+    public void setLeaderboard(LeaderBoard leaderboard) {
+        this.leaderboard = leaderboard;
     }
 }

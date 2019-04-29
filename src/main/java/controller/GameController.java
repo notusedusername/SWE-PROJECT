@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,7 @@ public class GameController {
         board = GameUtils.drawBoard(myBoard, board);
         p1Name.setText(Players.getPlayer("PLAYER1") + "\n (Horizontal)");
         p2Name.setText(Players.getPlayer("PLAYER2") + "\n (Vertical)");
+        playerTurn.setText(Players.getPlayer("PLAYER1") + "'s turn");
     }
 
     @FXML
@@ -78,27 +80,36 @@ public class GameController {
             GameUtils.writeTurn(playerTurn, ofield.getEventCounter());
             String winner = GameUtils.changeColor(ofield.getEventCounter(), ofield, myBoard, root).toString();
             if (!winner.equals("NONE")) {
-                switchStage(winner);
+                switchScene(winner);
             }
         }
 
     }
 
     @FXML
-    private void switchStage(String winner) {
+    private void switchScene(String winner) {
 
         Scene scene = board.getScene();
         Parent root = null;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/WinnerPopUp.fxml"));// FIXME: 2019.04.29.
+
         try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/WinnerPopUp.fxml"));
+            root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        WinnerPUController controller = loader.getController();
+        controller.setWinner(winner);
+        controller.setLeaderboard(getUpdatedLeaderBoard(winner));
         scene.setRoot(root);
-        if (winner.equals("TIE")) {
-            new WinnerPUController().printWinner(winner);
-        } else {
-            new WinnerPUController().printWinner(Players.getPlayer(winner));
-        }
+        System.out.println(scene.getRoot());
+
+    }
+
+    LeaderBoard getUpdatedLeaderBoard(String winner) {
+        LeaderBoard leaderBoard = JAXBUtil.read(logger);
+        leaderBoard.addName(winner);
+        JAXBUtil.write(leaderBoard, logger);
+        return leaderBoard;
     }
 }
