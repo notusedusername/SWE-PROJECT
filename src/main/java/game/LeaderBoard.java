@@ -36,7 +36,7 @@ public class LeaderBoard {
      * {@code ranks} ID-vel hivatkozható CSS-ből a {@code VBox}
      * @return {@code VBox} tipusu gyozteslista
      */
-    public VBox getNameAsNode() {
+    public static VBox getNameAsNode() {
 
         VBox leaderBoard = new VBox();
         leaderBoard.setId("ranks");
@@ -83,7 +83,7 @@ public class LeaderBoard {
      *
      * @param name A hozzaadando nev
      */
-    public void addName(String name) {
+    public static void addName(String name) {
         if (!name.equals("TIE")) {
             if (ranks.containsKey(name)) {
                 ranks.put(name, ranks.get(name) + 1);

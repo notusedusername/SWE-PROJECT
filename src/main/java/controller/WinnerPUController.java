@@ -21,20 +21,19 @@ public class WinnerPUController {
     VBox fxleaderboard;
     @FXML
     Label congrats;
-    private String winner;
-    private LeaderBoard leaderboard;
-
     @FXML
     void initialize() {
-        fxleaderboard.getChildren().add(leaderboard.getNameAsNode());
+        fxleaderboard.getChildren().add(LeaderBoard.getNameAsNode());
+    }
+
+    void printWinner(String winner) {
         if (winner.equals("TIE")) {
             congrats.setText("Do you know how to play??\n It's a tie.");
         } else {
-            String text = "Congrats" + Players.getPlayer(winner) + ", you won!";
+            String text = "Congrats " + Players.getPlayer(winner) + ", you won!";
             congrats.setText(text);
         }
     }
-
     @FXML
     public void playAgain() {
         Scene scene = fxleaderboard.getScene();
@@ -50,13 +49,5 @@ public class WinnerPUController {
     @FXML
     public void exit() {
         new MainMenuController().exit();
-    }
-
-    public void setWinner(String winner) {
-        this.winner = winner;
-    }
-
-    public void setLeaderboard(LeaderBoard leaderboard) {
-        this.leaderboard = leaderboard;
     }
 }

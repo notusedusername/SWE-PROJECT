@@ -12,13 +12,13 @@
 <BorderPane id="winnerscreen" prefHeight="780.0" prefWidth="1260" xmlns="http://javafx.com/javafx/8.0.172-ea"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WinnerPUController">
     <top>
-        <Label id="congrats" fx:id="congrats" prefHeight="85.0" prefWidth="345.0" wrapText="true"/>
+        <Label id="congrats" fx:id="congrats" wrapText="true"/>
     </top>
-    <left>
-        <VBox fx:id="fxleaderboard" prefHeight="629.0" prefWidth="400"/>
-    </left>
+    <center>
+        <VBox fx:id="fxleaderboard"/>
+    </center>
     <right>
-        <ImageView fx:id="image" BorderPane.alignment="TOP_RIGHT">
+        <ImageView BorderPane.alignment="TOP_RIGHT">
             <Image url="@/styles/shrek.jpg"/>
         </ImageView>
     </right>

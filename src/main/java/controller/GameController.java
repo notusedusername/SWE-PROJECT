@@ -90,6 +90,7 @@ public class GameController {
     private void switchScene(String winner) {
 
         Scene scene = board.getScene();
+        getUpdatedLeaderBoard(Players.getPlayer(winner));
         Parent root = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/WinnerPopUp.fxml"));// FIXME: 2019.04.29.
 
@@ -99,17 +100,15 @@ public class GameController {
             e.printStackTrace();
         }
         WinnerPUController controller = loader.getController();
-        controller.setWinner(winner);
-        controller.setLeaderboard(getUpdatedLeaderBoard(winner));
+        controller.printWinner(winner);
         scene.setRoot(root);
-        System.out.println(scene.getRoot());
+        logger.info("{}", scene.getRoot());
 
     }
 
-    LeaderBoard getUpdatedLeaderBoard(String winner) {
+    private void getUpdatedLeaderBoard(String winner) {
         LeaderBoard leaderBoard = JAXBUtil.read(logger);
-        leaderBoard.addName(winner);
+        LeaderBoard.addName(winner);
         JAXBUtil.write(leaderBoard, logger);
-        return leaderBoard;
     }
 }

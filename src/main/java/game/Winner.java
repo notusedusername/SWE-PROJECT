@@ -1,7 +1,7 @@
 package game;
 
 /**
- * A lehetséges Winner állapotokat tárolja
+ * A lehetséges győztes állapotokat tárolja
  */
 public enum Winner {
     PLAYER1,
