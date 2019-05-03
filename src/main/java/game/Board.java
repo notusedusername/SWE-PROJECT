@@ -4,16 +4,21 @@ package game;
 import java.util.ArrayList;
 
 /**
- * A tábla állapotának tárolásáért felelő osztály
+ * A tábla állapotának tárolásáért felelő osztály.
  */
 public class Board {
-
-    private ArrayList<ArrayList<Field>> board = new ArrayList<>();
+    /**
+     * A tábla {@code ArrayList<ArrayList<Field>>} reprezentációja.
+     */
+    private static ArrayList<ArrayList<Field>> board;
 
     /**
-     * A tábla kezdeti állapota
+     * A tábla konstruktora.
+     *
+     * Beállítja a tábla kezdeti állapotát (minden 2. mező piros/kék).
      */
     public Board() {
+        board = new ArrayList<>();
         for(int i = 0; i < 11; i++){
             ArrayList<Field> row = new ArrayList<>();
             for(int j = 0; j < 11; j++){
@@ -31,10 +36,21 @@ public class Board {
 
     }
 
-    public void setField(int x, int y, Color player){
+    /**
+     * Beállítja az adott koordinátájú {@link Field} {@link Color} értékét.
+     *
+     * @param x      A {@link Field} x koordinátája
+     * @param y      A {@link Field} y koordinátája
+     * @param player Az x, y koordinátájú {@link Field} kívánt színe
+     */
+    public void setFieldColor(int x, int y, Color player) {
         board.get(x).get(y).setColor(player);
     }
 
+    /**
+     * A tábla reprezentációjának getter függvénye.
+     * @return A tábla {@code ArrayList<ArrayList<Field>>} formában
+     */
     public ArrayList<ArrayList<Field>> getBoard() {
         return board;
     }

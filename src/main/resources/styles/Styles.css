@@ -21,11 +21,13 @@
     -fx-text-fill: white;
 }
 
-#mainmenu, #game, #winners, #playernames, #winnerscreen, #popup, #turn, #playtitle {
+#mainmenu, #game, #winners,
+#playernames, #winnerscreen,
+#popup, #turn, #p1Turn, #p2Turn,
+#playtitle {
     -fx-background-image: url("background.jpg");
     -fx-background-repeat: repeat;
     -fx-background-position: center center;
-    /*-fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0);*/
     -fx-padding: 10 10 10 10;
 
 }
@@ -57,15 +59,18 @@
     -fx-text-fill: red;
 }
 
-#p1OnList, #turn {
+#p1OnList {
     -fx-text-fill: navy;
 }
 
 #p2OnList {
     -fx-text-fill: #c90000
-
 }
 
-#boardBackground {
+#Player1Background {
     -fx-background-color: #4286f4;
+}
+
+#Player2Background {
+    -fx-background-color: #ff5b5b;
 }

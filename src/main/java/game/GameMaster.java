@@ -12,14 +12,16 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
- * A projekt fő osztálya, a az egész játékmenetért felel.
+ * A projekt fő osztálya.
+ *
+ * Slf4j logolást használ.
  */
 public class GameMaster extends Application {
 
-    private static Logger logger = LoggerFactory.getLogger(GameMaster.class);
-
     /**
-     * Elindítja a program futását, létrehozza a főmenüt.
+     *  A játékprogram indulását kezelő függvény.
+     *
+     *  Betölti a {@code MainMenu.fxml} állományt.
      *
      * @param primaryStage A fő programablak
      */
@@ -31,7 +33,6 @@ public class GameMaster extends Application {
             e.printStackTrace();
         }
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("styles/Styles.css");
         primaryStage.setTitle("ColorWar");
         primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitHint("");
@@ -39,6 +40,11 @@ public class GameMaster extends Application {
         primaryStage.show();
     }
 
+    /**
+     * A program belépési pontja.
+     *
+     * @param args parancssori argumentumok
+     */
     public static void main(String[] args) {
         launch(args);
     }

@@ -3,13 +3,16 @@ package game;
 import java.util.ArrayList;
 
 /**
- * A játékosok nicknevét kezelő osztály
+ * A játékosok nicknevét kezelő osztály.
  */
 public class Players {
+    /**
+     * A játékosok nickneveinek listája.
+     */
     private static ArrayList<String> players = new ArrayList<>();
 
     /**
-     * Adott játékos nevét adja vissza
+     * Adott játékos nevét adja vissza.
      *
      * @param player A játékos program által használt neve {@code (PLAYER1, PLAYER2)}
      * @return a kért játékos nickneve

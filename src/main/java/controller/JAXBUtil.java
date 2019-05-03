@@ -9,7 +9,9 @@ import java.io.*;
 import game.LeaderBoard;
 import org.slf4j.Logger;
 
-
+/**
+ * {@link javax.xml.bind.JAXB} eszközök használatát egyszerűsítő osztály.
+ */
 public class JAXBUtil {
 
     /**
@@ -28,8 +30,9 @@ public class JAXBUtil {
     }
 
     /**
-     * XML-ből olvas be objektumba
+     * XML-ből olvas be objektumba.
      *
+     * @param <T> Generikus osztály
      * @param clazz az objektum osztálya
      * @param is    az {@link InputStream} ahonnan olvasunk
      * @return a célobjektum
@@ -42,12 +45,12 @@ public class JAXBUtil {
     }
 
     /**
-     * Speciális függvény, a játék mappájából {@code user.home/ColorWar} olvassa a leaderboard.xml-t
+     * Speciális függvény, a játék mappájából {@code user.home/ColorWar} olvassa a leaderboard.xml-t.
      *
      * @param logger a loghoz szükséges logger
      * @return a beolvasott objektumot adja vissza
      */
-    static LeaderBoard read(Logger logger) {
+    static LeaderBoard readFromXML(Logger logger) {
         LeaderBoard ranks = new LeaderBoard();
         try {
             ranks = JAXBUtil.fromXML(game.LeaderBoard.class, new FileInputStream(System.getProperty("user.home")
@@ -63,12 +66,12 @@ public class JAXBUtil {
 
     /**
      * Speciális függvény, a játék mappájába {@code user.home/ColorWar} írja felül a leaderboard.xml-t,
-     * illetve ha nincs ilyen állomány, akkor létrehozza
+     * illetve ha nincs ilyen állomány, akkor létrehozza.
      *
      * @param leaderBoard a kiírandó objektum
      * @param logger      a logoláshoz szükséges logger
      */
-    static void write(LeaderBoard leaderBoard, Logger logger) {
+    static void writeToXML(LeaderBoard leaderBoard, Logger logger) {
         try {
             File file = new File(System.getProperty("user.home") + "/ColorWar");
             logger.info("Try to write the new leaderboard state.");

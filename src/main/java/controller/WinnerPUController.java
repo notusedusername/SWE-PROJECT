@@ -23,7 +23,7 @@ public class WinnerPUController {
     Label congrats;
     @FXML
     void initialize() {
-        fxleaderboard.getChildren().add(LeaderBoard.getNameAsNode());
+        fxleaderboard.getChildren().add(LeaderBoard.getLeaderBoardAsNode());
     }
 
     void printWinner(String winner) {

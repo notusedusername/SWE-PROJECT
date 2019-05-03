@@ -18,39 +18,52 @@ import java.util.stream.Collectors;
 
 
 /**
- * Tarolja a győztes játékosok nevét és
- * a grafikus megjeleniteset is tartalmazza a listanak.
+ * A ranglistát kezelő osztály.
+ * <p>
+ * A {@link controller.JAXBUtil} osztállyal írható/olvasható osztály,
+ * a kreált xml struktúrája
+ * <pre>
+ *      {@code
+ *          <leaderboard>
+ *              <ranks>
+ *                  <entry>
+ *                      <key> someKeyValue </key>
+ *                      <value> someValue </value>
+ *                  </entry>
+ *              </ranks>
+ *          </leaderboard>
+ *      }
+ * </pre>
+ * Slf4j logolást használ.
  */
 @javax.xml.bind.annotation.XmlRootElement(name = "leaderboard")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class LeaderBoard {
-
-    @XmlElement(name = "player")
+    /**
+     * A ranglista név-győzelem szám párjait tároló {@code LinkedHashMap<String, Integer>}.
+     */
+    @XmlElement()
     private static Map<String, Integer> ranks = new LinkedHashMap<>();
 
+    /**
+     * Slf4j logger.
+     */
     private static Logger logger = LoggerFactory.getLogger(LeaderBoard.class);
 
     /**
-     * Egy {@code VBox} tipusu listat ad vissza, az 5 legtöbbet nyert játékos nevével
+     * Egy {@code VBox} típusu listát ad vissza, az 5 legtöbbet nyert játékos nevével
      * és győzelmeik számával.
-     * {@code ranks} ID-vel hivatkozható CSS-ből a {@code VBox}
-     * @return {@code VBox} tipusu gyozteslista
+     *  A {@code VBox} {@code ranks} ID-vel hivatkozható CSS-ből
+     *
+     * @return {@code VBox} típusu győzteslista
      */
-    public static VBox getNameAsNode() {
+    public static VBox getLeaderBoardAsNode() {
 
         VBox leaderBoard = new VBox();
         leaderBoard.setId("ranks");
         leaderBoard.setPadding(new Insets(5));
         leaderBoard.getChildren().add(new Label("5 most OP player:\n\n"));
-        ranks = ranks.entrySet()
-                .stream()
-                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-
-        logger.info("Leaderboard sorted");
+        sortLeaderBoard();
 
         if (ranks.size() > 0) {
             int i = 0;
@@ -76,12 +89,33 @@ public class LeaderBoard {
         return leaderBoard;
     }
 
+    /**
+     * A ranglista pillanatnyi állapotát rendezi át csökkenő sorrendre.
+     * <p>
+     * A rendezés alapja a nicknevek értéke, ami az adott játékos által nyert meccsek
+     * számát jelenti.
+     */
+    private static void sortLeaderBoard() {
+        ranks = ranks.entrySet()
+                .stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+        logger.info("Leaderboard sorted");
+    }
+
 
     /**
-     * Hozzaadja a {@code param} nevet a listahoz, vagy
+     * Frissíti a ranglistát az új győztessel.
+     * <p>
+     * Hozzáadja a {@code param} nevet a listához, vagy
      * ha a lista már tartalmazza növeli a győzelmei számát.
+     * Döntetlen eredményt nem jegyez fel.
      *
-     * @param name A hozzaadando nev
+     * @param name A hozzaadandó név
      */
     public static void addName(String name) {
         if (!name.equals("TIE")) {
@@ -96,6 +130,15 @@ public class LeaderBoard {
         }
     }
 
+    /**
+     * Ranglista getter függvénye.
+     *
+     * @return csökkenően rendezett {@code LinkedHashMap} ranglista
+     */
+    public static Map<String, Integer> getRanks() {
+        sortLeaderBoard();
+        return ranks;
+    }
 }
 
 

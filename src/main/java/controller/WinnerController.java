@@ -18,8 +18,8 @@ public class WinnerController {
 
     @FXML
     public void initialize() {
-        LeaderBoard ranks = JAXBUtil.read(logger);
-        leaderboard.getChildren().add(ranks.getNameAsNode());
+        JAXBUtil.readFromXML(logger);
+        leaderboard.getChildren().add(LeaderBoard.getLeaderBoardAsNode());
     }
 
     @FXML
