@@ -36,12 +36,17 @@ public class GameController {
 
     @FXML
     void initialize() {
-        board = GameUtils.drawBoard(myBoard, board);
+        GameUtils.drawBoard(myBoard, board);
         p1Name.setText(Players.getPlayer("PLAYER1") + "\n (Horizontal)");
         p2Name.setText(Players.getPlayer("PLAYER2") + "\n (Vertical)");
         playerTurn.setText(Players.getPlayer("PLAYER1") + "'s turn");
     }
 
+    /**
+     * {@code FXML Button} vissza a főmenűbe eseménykezelő.
+     * <p>
+     * Betölti a {@code MainMenu.fxml} állományt.
+     */
     @FXML
     protected void backToMain() {
 
@@ -55,30 +60,38 @@ public class GameController {
         scene.setRoot(root);
     }
 
+    /**
+     * {@code FXML Button} kilépés eseménykezelő.
+     *
+     * Meghívja a MainMenuController azonos nevű függvényét.
+     */
     @FXML
     protected void exit() {
         new MainMenuController().exit();
     }
 
+    /**
+     * {@code FXML GridPane} eseménykezelő függvénye.
+     * Ellenőrzi a lépés érvényességét, és megvizsgálja, van-e győztes az új állapotban.
+     * @param mouseEvent Az elkapott egéresemény (kattintás)
+     */
     @FXML
     protected void gridClicked(MouseEvent mouseEvent) {
         Node clickedNode = mouseEvent.getPickResult().getIntersectedNode();
         Integer colIndex = GridPane.getColumnIndex(clickedNode);
         Integer rowIndex = GridPane.getRowIndex(clickedNode);
         OccupiedPosition ofield = new OccupiedPosition();
-        try {
-            myBoard.getBoard().get(colIndex).get(rowIndex).getColor();
 
-        } catch (NullPointerException e) {
-            logger.info("A játékos a griden kívülre kattintott");
+        if (!isThisAValidStep(colIndex, rowIndex)) {
             return;
         }
+
         if (myBoard.getBoard().get(colIndex).get(rowIndex).getColor() == Color.NONE) {
             logger.info("x: " + colIndex + " y: " + rowIndex);
             ofield.setPosition(colIndex, rowIndex);
             ofield.setClickedNode(clickedNode);
-            GameUtils.writeTurn(playerTurn, ofield.getEventCounter());
-            String winner = GameUtils.changeColor(ofield.getEventCounter(), ofield, myBoard, root).toString();
+            GameUtils.writeTurn(playerTurn);
+            String winner = GameUtils.changeColor(ofield, myBoard, root).toString();
             if (!winner.equals("NONE")) {
                 switchScene(winner);
             }
@@ -86,13 +99,38 @@ public class GameController {
 
     }
 
+    /**
+     * Ellenőrzi, hogy az elkapott kattintás valóban a {@code GridPane}
+     * területére esik-e.
+     *
+     * @param colIndex A kattintás {@code GridPane}-beli oszlopindexe
+     * @param rowIndex A kattintás {@code GridPane}-beli sorindexe
+     * @return {@code true} ha érvényes koordináta, {@code false} egyébként
+     */
+    private boolean isThisAValidStep(Integer colIndex, Integer rowIndex) {
+        try {
+            myBoard.getBoard().get(colIndex).get(rowIndex).getColor();
+
+        } catch (NullPointerException e) {
+            logger.info("A játékos a griden kívülre kattintott");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Átváltja az akív {@code Scene}-t a győztesnek gratuláló {@code Scene}-re.
+     * Betölti a {@code WinnerPopUp.fxml} állományt
+     *
+     * @param winner A győztes játékos neve
+     */
     @FXML
     private void switchScene(String winner) {
 
         Scene scene = board.getScene();
-        getUpdatedLeaderBoard(Players.getPlayer(winner));
+        UpdateLeaderBoard(Players.getPlayer(winner));
         Parent root = null;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/WinnerPopUp.fxml"));// FIXME: 2019.04.29.
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/WinnerPopUp.fxml"));
 
         try {
             root = loader.load();
@@ -106,9 +144,15 @@ public class GameController {
 
     }
 
-    private void getUpdatedLeaderBoard(String winner) {
-        LeaderBoard leaderBoard = JAXBUtil.read(logger);
+    /**
+     * Frissíti a ranglista értékeit, beolvassa, hozzáfűzi az új értéket
+     * majd újra kiírja.
+     *
+     * @param winner a hozzáfűzendő nickname
+     */
+    private void UpdateLeaderBoard(String winner) {
+        LeaderBoard leaderBoard = JAXBUtil.readFromXML(logger);
         LeaderBoard.addName(winner);
-        JAXBUtil.write(leaderBoard, logger);
+        JAXBUtil.writeToXML(leaderBoard, logger);
     }
 }

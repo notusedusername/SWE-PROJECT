@@ -3,7 +3,7 @@ package game;
 import javafx.scene.Node;
 
 /**
- * A játékosok által elfogalt mezőket kezelő osztály
+ * A játékosok által elfogalt mezőket kezelő osztály.
  */
 public class OccupiedPosition {
     /**
@@ -13,42 +13,79 @@ public class OccupiedPosition {
      */
     private int[] position = {-1, -1};
     /**
-     * Az elfoglalandó terület grafikus megjelenése
+     * Az elfoglalandó terület grafikus megjelenése.
      */
     private Node clickedNode;
     /**
-     * Az elfoglalásesemények száma, a {@code game.GameMaster play()} függvénye
-     * minden új játékesemény során egyszer példányosítja az osztályt, majd a
-     * {@code setEventCounter(Integer eventCounter)} segítségével változtatja az értéket,
-     * ezért nem {@code static}.
+     * Az elfoglalásesemények száma.
      */
     private static int eventCounter;
 
-    public int getEventCounter() {
-        return eventCounter;
-    }
-
+    /**
+     * Megvizsgálja, hogy az adott táblán van-e még szabad hely.
+     * <p>
+     * A {@link Color}{@code .NONE} tulajdonságú mezők számítanak szabadnak,
+     * ezek pont a tábla felét foglalják el.
+     *
+     * @param board A pillanatnyi táblareprezentáció
+     * @return {@code true}, ha az elfoglalt helyek száma megegyezik a maximális szabad helyek számával,
+     * {@code false} egyébként.
+     */
     public boolean isTheBoardFull(Board board) {
         int boardSize = board.getBoard().size();
         return getEventCounter() >= (boardSize * boardSize) / 2;
     }
 
-    public void setEventCounter(Integer eventCounter) {
-        this.eventCounter = eventCounter;
+    /**
+     * {@code eventCounter} getter függvénye.
+     *
+     * @return eventCounter pillanatnyi értéke
+     */
+    public static int getEventCounter() {
+        return eventCounter;
     }
 
+    /**
+     * {@code eventCounter} setter függvénye.
+     *
+     * @param eventCounter eventCounter új értéke
+     */
+    public static void setEventCounter(Integer eventCounter) {
+        OccupiedPosition.eventCounter = eventCounter;
+    }
+
+    /**
+     * {@code clickedNode} getter függvénye.
+     *
+     * @return clickedNode pillanatnyi értéke
+     */
     public Node getClickedNode() {
         return clickedNode;
     }
 
+    /**
+     * {@code eventCounter} setter függvénye.
+     *
+     * @param clickedNode clickedNode új értéke
+     */
     public void setClickedNode(Node clickedNode) {
         this.clickedNode = clickedNode;
     }
 
+    /**
+     * {@code position} getter függvénye.
+     *
+     * @return position pillanatnyi értéke
+     */
     public int[] getPosition() {
         return position;
     }
 
+    /**
+     * {@code position} tömb elemeinek új értéke.
+     * @param x koordináta {@code position[0]} űj értéke
+     * @param y koordináta {@code position[1]} új értéke
+     */
     public void setPosition(int x, int y) {
         this.position[0] = x;
         this.position[1] = y;

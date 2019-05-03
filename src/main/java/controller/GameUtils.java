@@ -9,17 +9,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 
+/**
+ * A játék vezérlése során használt segédfüggvényeket tartalmazó osztály.
+ */
 public class GameUtils {
+    /**
+     * Az események logolására szolgáló Slf4j logger.
+     */
     private static Logger logger = LoggerFactory.getLogger(GameUtils.class);
 
     /**
-     * A tábla grafikus reprezentációjáért felel.
+     * A tábla grafikus reprezentációját inicializálja.
      *
      * @param myBoard A kirajzolandó tábla mátrixa
-     * @param boardUI A kitöltendő grafikus elem ({@code GridPane}
-     * @return A kitöltött {@code Gridpane} elem.
+     * @param boardUI inicializálandó {@code GridPane}
      */
-    static GridPane drawBoard(Board myBoard, GridPane boardUI) {
+    static void drawBoard(Board myBoard, GridPane boardUI) {
         for (int i = 0; i < myBoard.getBoard().size(); i++) {
             for (int j = 0; j < myBoard.getBoard().get(i).size(); j++) {
                 StackPane square = new StackPane();
@@ -31,7 +36,6 @@ public class GameUtils {
             }
         }
         logger.info("Board initial state done");
-        return boardUI;
     }
 
     /**
@@ -80,15 +84,15 @@ public class GameUtils {
     /**
      * A táblán a játékosok által "elfoglalt" mezőket színezi át a megfelelő színűre.
      *
-     * @param event   Számolja a mezőfogalási eseményeket (fontos, hogy tudjuk ki lép)
      * @param ofield  A bekattinott {@code Node} elem
-     * @param myBoard A jelenlegi játéktábla
+     * @param myBoard A jelenlegi játéktáblaállás
      * @param region  A {@code Stage}, ahol a tábla elhelyezkedik (változtatja a háttér színét az
-     *                aktív játékos alapján.
-     * @return A nyertes játékos
+     *                aktív játékos alapján).
+     * @return A nyertes értékét ({@code PLAYER1, PLAYER2, TIE, NONE})
      */
-    static Winner changeColor(int event, OccupiedPosition ofield, Board myBoard, BorderPane region) {
+    static Winner changeColor(OccupiedPosition ofield, Board myBoard, BorderPane region) {
 
+        int event = OccupiedPosition.getEventCounter();
         if (ofield.isTheBoardFull(myBoard)) {
             return Winner.TIE;
         }
@@ -96,8 +100,8 @@ public class GameUtils {
         int y = ofield.getPosition()[1];
         Node clickedNode = ofield.getClickedNode();
         if (event % 2 == 0) {
-            region.setStyle("-fx-background-color: #ff5b5b;");
-            myBoard.setField(x, y, Color.PLAYER1);
+            region.setId("Player2Background");
+            myBoard.setFieldColor(x, y, Color.PLAYER1);
             clickedNode.setStyle("-fx-background-color: "
                     + Color.PLAYER1.getColor()
                     + ";");
@@ -108,8 +112,8 @@ public class GameUtils {
                 return Winner.PLAYER1;
             }
         } else {
-            region.setStyle("-fx-background-color: #4286f4;");
-            myBoard.setField(x, y, Color.PLAYER2);
+            region.setId("Player1Background");
+            myBoard.setFieldColor(x, y, Color.PLAYER2);
             clickedNode.setStyle("-fx-background-color: "
                     + Color.PLAYER2.getColor()
                     + ";");
@@ -120,23 +124,23 @@ public class GameUtils {
             }
         }
 
-        ofield.setEventCounter(ofield.getEventCounter() + 1);
+        OccupiedPosition.setEventCounter(event + 1);
         return Winner.NONE;
     }
 
     /**
-     * Az éppen következő játékos nevének megjelenését
+     * Az éppen következő játékos nevének megjelenését szabályozza.
      *
      * @param turn  a módosítandó {@code Label }
-     * @param event az eseményszám, amiből a soron következő játékost számoljuk
      */
-    static void writeTurn(Label turn, int event) {
+    static void writeTurn(Label turn) {
+        int event = OccupiedPosition.getEventCounter();
         if (event % 2 == 1) {
             turn.setText(Players.getPlayer("PLAYER1") + "'s turn");
-            turn.setStyle("-fx-text-fill: navy;");
+            turn.setId("p1Turn");
         } else {
             turn.setText(Players.getPlayer("PLAYER2") + "'s turn");
-            turn.setStyle("-fx-text-fill: #c90000 ;");
+            turn.setId("p2Turn");
         }
     }
 }
