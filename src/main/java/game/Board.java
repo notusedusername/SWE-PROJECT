@@ -36,6 +36,10 @@ public class Board {
 
     }
 
+    public static void setBoard(ArrayList<ArrayList<Field>> board) {
+        Board.board = board;
+    }
+
     /**
      * Beállítja az adott koordinátájú {@link Field} {@link Color} értékét.
      *

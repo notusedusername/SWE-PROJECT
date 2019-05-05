@@ -48,7 +48,7 @@ public class GameUtils {
      * @param column  a tábla adott oszlopindexe
      * @return {@code ArrayList<Field>} érték, a tábla egy oszlopa
      */
-    static ArrayList<Field> getColumn(Board myBoard, int column) {
+    public static ArrayList<Field> getColumn(Board myBoard, int column) {
         ArrayList<Field> toReturn = new ArrayList<>();
         for (int i = 0; i < myBoard.getBoard().size(); i++) {
             toReturn.add(myBoard.getBoard().get(i).get(column));
@@ -63,7 +63,7 @@ public class GameUtils {
      * @param fields A {@code Field} típusú lista
      * @return Ha mind egyszínű igaz, egyébként hamis.
      */
-    static boolean isThereWinner(ArrayList<Field> fields) {
+    public static boolean isThereWinner(ArrayList<Field> fields) {
 
         Color previous = Color.NONE;
 
@@ -90,7 +90,7 @@ public class GameUtils {
      *                aktív játékos alapján).
      * @return A nyertes értékét ({@code PLAYER1, PLAYER2, TIE, NONE})
      */
-    static Winner changeColor(OccupiedPosition ofield, Board myBoard, BorderPane region) {
+    public static Winner changeColor(OccupiedPosition ofield, Board myBoard, BorderPane region) {
 
         int event = OccupiedPosition.getEventCounter();
         if (ofield.isTheBoardFull(myBoard)) {
@@ -133,7 +133,7 @@ public class GameUtils {
      *
      * @param turn  a módosítandó {@code Label }
      */
-    static void writeTurn(Label turn) {
+    public static void writeTurn(Label turn) {
         int event = OccupiedPosition.getEventCounter();
         if (event % 2 == 1) {
             turn.setText(Players.getPlayer("PLAYER1") + "'s turn");

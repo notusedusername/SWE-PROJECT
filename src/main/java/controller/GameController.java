@@ -128,7 +128,9 @@ public class GameController {
     private void switchScene(String winner) {
 
         Scene scene = board.getScene();
-        UpdateLeaderBoard(Players.getPlayer(winner));
+        if(!winner.equals("TIE")){
+            UpdateLeaderBoard(Players.getPlayer(winner));
+        }
         Parent root = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/WinnerPopUp.fxml"));
 
