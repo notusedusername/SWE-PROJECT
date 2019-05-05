@@ -41,7 +41,7 @@ public class GameMaster extends Application {
     }
 
     /**
-     * A program belépési pontja.
+     * A {@link Main} osztály hívja meg, ez a program valódi {@code main} függvénye.
      *
      * @param args parancssori argumentumok
      */
