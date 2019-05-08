@@ -21,20 +21,6 @@ import java.util.stream.Collectors;
  * A ranglistát kezelő osztály.
  * <p>
  * A {@link controller.JAXBUtil} osztállyal írható/olvasható osztály,
- * a kreált xml struktúrája
- * <pre>
- *      {@code
- *          <leaderboard>
- *              <ranks>
- *                  <entry>
- *                      <key> someKeyValue </key>
- *                      <value> someValue </value>
- *                  </entry>
- *              </ranks>
- *          </leaderboard>
- *      }
- * </pre>
- * Slf4j logolást használ.
  */
 @javax.xml.bind.annotation.XmlRootElement(name = "leaderboard")
 @XmlAccessorType(XmlAccessType.FIELD)

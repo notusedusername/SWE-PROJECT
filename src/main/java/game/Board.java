@@ -9,6 +9,9 @@ import java.util.ArrayList;
 public class Board {
     /**
      * A tábla {@code ArrayList<ArrayList<Field>>} reprezentációja.
+     *
+     * FONTOS! Az {@code ArrayList<ArrayList<>>} tárolás miatt a táblát 90 fokkal elforgatva
+     * tároljuk, így a sor oszlopot sorként, a sort oszlopként kellene értelmezni.
      */
     private static ArrayList<ArrayList<Field>> board;
 
@@ -34,10 +37,6 @@ public class Board {
 
         }
 
-    }
-
-    public static void setBoard(ArrayList<ArrayList<Field>> board) {
-        Board.board = board;
     }
 
     /**

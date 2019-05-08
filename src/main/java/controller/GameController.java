@@ -17,23 +17,48 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 
 
-
+/**
+ * A fő játékablak controller osztálya.
+ */
 public class GameController {
-
+    /**
+     * A logoláshoz szükséges logger.
+     */
     private static Logger logger = LoggerFactory.getLogger(GameController.class);
+    /**
+     * A játékablakban elhelyezett {@code GridPane}, a grafikus megjelenése a
+     * táblának.
+     */
     @FXML
     GridPane board;
+    /**
+     * A játékablak grafikájának gyökéreleme, {@code BorderPane}.
+     */
     @FXML
     BorderPane root;
+    /**
+     * Az 1-es játékos nicknevét megjelenítő {@code Label}.
+     */
     @FXML
     Label p1Name;
+    /**
+     * A 2-es játékos nicknevét megjelenítő {@code Label}.
+     */
     @FXML
     Label p2Name;
+    /**
+     * Az épp soron következő játékos nicknevét megjelenítő {@code Label}.
+     */
     @FXML
     Label playerTurn;
-
+    /**
+     * A játéktábla állását tároló {@link Board} objektum.
+     */
     private Board myBoard = new Board();
 
+    /**
+     * A {@code Controller} inicializáló függvénye.
+     */
     @FXML
     void initialize() {
         GameUtils.drawBoard(myBoard, board);
@@ -120,7 +145,7 @@ public class GameController {
 
     /**
      * Átváltja az akív {@code Scene}-t a győztesnek gratuláló {@code Scene}-re.
-     * Betölti a {@code WinnerPopUp.fxml} állományt
+     * Betölti a {@code WinnerPopUp.fxml} állományt.
      *
      * @param winner A győztes játékos neve
      */
