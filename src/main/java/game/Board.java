@@ -36,14 +36,13 @@ public class Board {
             board.add(row);
 
         }
-
     }
 
     /**
      * Beállítja az adott koordinátájú {@link Field} {@link Color} értékét.
      *
-     * @param x      A {@link Field} x koordinátája
-     * @param y      A {@link Field} y koordinátája
+     * @param x  A {@link Field} x koordinátája
+     * @param y  A {@link Field} y koordinátája
      * @param player Az x, y koordinátájú {@link Field} kívánt színe
      */
     public void setFieldColor(int x, int y, Color player) {

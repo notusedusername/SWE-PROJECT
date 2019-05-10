@@ -20,9 +20,10 @@ public class Players {
     public static String getPlayer(String player) {
         if (player.equals("PLAYER1")) {
             return players.get(0);
-        } else {
+        } else if (player.equals("PLAYER2")) {
             return players.get(1);
         }
+        return null;
     }
 
     /**

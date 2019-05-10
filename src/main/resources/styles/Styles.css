@@ -20,11 +20,9 @@
     -fx-alignment: center;
     -fx-text-fill: white;
 }
-
 #mainmenu, #game, #winners,
 #playernames, #winnerscreen,
-#popup, #turn, #p1Turn, #p2Turn,
-#playtitle {
+#popup, #turn, #p1Turn, #p2Turn {
     -fx-background-image: url("background.jpg");
     -fx-background-repeat: repeat;
     -fx-background-position: center center;
@@ -65,12 +63,4 @@
 
 #p2OnList {
     -fx-text-fill: #c90000
-}
-
-#Player1Background {
-    -fx-background-color: #4286f4;
-}
-
-#Player2Background {
-    -fx-background-color: #ff5b5b;
 }

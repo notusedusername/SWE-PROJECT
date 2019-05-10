@@ -13,47 +13,59 @@ import java.util.ArrayList;
  * A játék vezérlése során használt segédfüggvényeket tartalmazó osztály.
  */
 public class GameUtils {
+
     /**
      * Az események logolására szolgáló Slf4j logger.
      */
     private static Logger logger = LoggerFactory.getLogger(GameUtils.class);
 
     /**
-     * A tábla grafikus reprezentációját inicializálja.
+     * A táblán a játékosok által "elfoglalt" mezőket színezi át a megfelelő színűre.
      *
-     * @param myBoard A kirajzolandó tábla mátrixa
-     * @param boardUI inicializálandó {@code GridPane}
+     * Az átszinezés mind az adatszerkezetben, mind a grafikán történik.
+     * @param ofield  A bekattinott {@code Node} elem
+     * @param myBoard A jelenlegi játéktáblaállás
+     * @return A nyertes értékét ({@code PLAYER1, PLAYER2, TIE, NONE})
      */
-    static void drawBoard(Board myBoard, GridPane boardUI) {
-        for (int i = 0; i < myBoard.getBoard().size(); i++) {
-            for (int j = 0; j < myBoard.getBoard().get(i).size(); j++) {
-                StackPane square = new StackPane();
-                square.setMinSize(50, 50);
-                square.setStyle("-fx-background-color: "
-                        + myBoard.getBoard().get(i).get(j)
-                        + ";");
-                boardUI.add(square, i, j);
+    public static Winner changeColor(OccupiedPosition ofield, Board myBoard) {
+
+        int event = OccupiedPosition.getEventCounter();
+
+        if (ofield.isTheBoardFull(myBoard)) {
+            return Winner.TIE;
+        }
+
+        int x = ofield.getPosition()[0];
+        int y = ofield.getPosition()[1];
+        Node clickedNode = ofield.getClickedNode();
+
+        if (event % 2 == 0) {
+            myBoard.setFieldColor(x, y, Color.PLAYER1);
+            clickedNode.setStyle("-fx-background-color: "
+                    + Color.PLAYER1.getColor()
+                    + ";");
+            logger.info("{} turn", Color.PLAYER1.getColor());
+
+            if (isThereWinner(getColumn(myBoard, y))) {
+                logger.info(Color.PLAYER1 + " won");
+                return Winner.PLAYER1;
+            }
+
+        } else {
+            myBoard.setFieldColor(x, y, Color.PLAYER2);
+            clickedNode.setStyle("-fx-background-color: "
+                    + Color.PLAYER2.getColor()
+                    + ";");
+            logger.info("{} turn", Color.PLAYER2.getColor());
+            if (isThereWinner(myBoard.getBoard().get(x))) {
+                logger.info(Color.PLAYER2 + " won");
+                return Winner.PLAYER2;
             }
         }
-        logger.info("Board initial state done");
-    }
 
-    /**
-     * Egy tábla {@code column}. oszlopát adja vissza.
-     * Azért van rá szükség, mert a {@code Board} táblát leképező adatszerketete
-     * egy {@code ArrayList<ArrayList<Field>>}, aminek csak a sorát kérhetjük le
-     * beépített függvénnyel.
-     *
-     * @param myBoard {@code Board} típusú objektum, a bemeneti tábla
-     * @param column  a tábla adott oszlopindexe
-     * @return {@code ArrayList<Field>} érték, a tábla egy oszlopa
-     */
-    public static ArrayList<Field> getColumn(Board myBoard, int column) {
-        ArrayList<Field> toReturn = new ArrayList<>();
-        for (int i = 0; i < myBoard.getBoard().size(); i++) {
-            toReturn.add(myBoard.getBoard().get(i).get(column));
-        }
-        return toReturn;
+        OccupiedPosition.setEventCounter(event + 1);
+
+        return Winner.NONE;
     }
 
     /**
@@ -82,53 +94,6 @@ public class GameUtils {
     }
 
     /**
-     * A táblán a játékosok által "elfoglalt" mezőket színezi át a megfelelő színűre.
-     *
-     * @param ofield  A bekattinott {@code Node} elem
-     * @param myBoard A jelenlegi játéktáblaállás
-     * @param region  A {@code Stage}, ahol a tábla elhelyezkedik (változtatja a háttér színét az
-     *                aktív játékos alapján).
-     * @return A nyertes értékét ({@code PLAYER1, PLAYER2, TIE, NONE})
-     */
-    public static Winner changeColor(OccupiedPosition ofield, Board myBoard, BorderPane region) {
-
-        int event = OccupiedPosition.getEventCounter();
-        if (ofield.isTheBoardFull(myBoard)) {
-            return Winner.TIE;
-        }
-        int x = ofield.getPosition()[0];
-        int y = ofield.getPosition()[1];
-        Node clickedNode = ofield.getClickedNode();
-        if (event % 2 == 0) {
-            region.setId("Player2Background");
-            myBoard.setFieldColor(x, y, Color.PLAYER1);
-            clickedNode.setStyle("-fx-background-color: "
-                    + Color.PLAYER1.getColor()
-                    + ";");
-            logger.info("{} turn", Color.PLAYER1.getColor());
-
-            if (isThereWinner(getColumn(myBoard, y))) {
-                logger.info(Color.PLAYER1 + " won");
-                return Winner.PLAYER1;
-            }
-        } else {
-            region.setId("Player1Background");
-            myBoard.setFieldColor(x, y, Color.PLAYER2);
-            clickedNode.setStyle("-fx-background-color: "
-                    + Color.PLAYER2.getColor()
-                    + ";");
-            logger.info("{} turn", Color.PLAYER2.getColor());
-            if (isThereWinner(myBoard.getBoard().get(x))) {
-                logger.info(Color.PLAYER2 + " won");
-                return Winner.PLAYER2;
-            }
-        }
-
-        OccupiedPosition.setEventCounter(event + 1);
-        return Winner.NONE;
-    }
-
-    /**
      * Az éppen következő játékos nevének megjelenését szabályozza.
      *
      * @param turn  a módosítandó {@code Label }
@@ -142,5 +107,23 @@ public class GameUtils {
             turn.setText(Players.getPlayer("PLAYER2") + "'s turn");
             turn.setId("p2Turn");
         }
+    }
+
+    /**
+     * Egy tábla {@code column}. oszlopát adja vissza.
+     * Azért van rá szükség, mert a {@code Board} táblát leképező adatszerketete
+     * egy {@code ArrayList<ArrayList<Field>>}, aminek csak a sorát kérhetjük le
+     * beépített függvénnyel.
+     *
+     * @param myBoard {@code Board} típusú objektum, a bemeneti tábla
+     * @param column  a tábla adott oszlopindexe
+     * @return {@code ArrayList<Field>} érték, a tábla egy oszlopa
+     */
+    public static ArrayList<Field> getColumn(Board myBoard, int column) {
+        ArrayList<Field> toReturn = new ArrayList<>();
+        for (int i = 0; i < myBoard.getBoard().size(); i++) {
+            toReturn.add(myBoard.getBoard().get(i).get(column));
+        }
+        return toReturn;
     }
 }

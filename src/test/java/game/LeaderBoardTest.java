@@ -1,5 +1,6 @@
 package game;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,31 +9,43 @@ import java.util.Map;
 
 
 public class LeaderBoardTest {
-    @Test
-    public void leaderBoardTest() {
+
+    @BeforeAll
+    private static void initialize() {
+
+        LeaderBoard.addName("TestName2");
         for (int i = 0; i < 3; i++) {
             LeaderBoard.addName("TestName");
         }
-        LeaderBoard.addName("TestName2");
+    }
 
-        Integer actual = LeaderBoard.getRanks().get("TestName");
-        Integer expected = 3;
-        assertNotNull(LeaderBoard.getRanks());
-        assertEquals(expected, actual);
-
-        var firstEntry = LeaderBoard.getRanks().entrySet().iterator().next();
-        assertEquals("TestName", firstEntry.getKey());
-        assertEquals(expected, firstEntry.getValue());
-
+    private Map.Entry getLastEntry(Map<String, Integer> ranks) {
         Map.Entry lastEntry = null;
-        Map<String, Integer> ranks = LeaderBoard.getRanks();
         for (Map.Entry<String, Integer> e : ranks.entrySet()) {
             lastEntry = e;
         }
+        return lastEntry;
+    }
 
-        expected = 1;
+    @Test
+    public void leaderBoardSortingRanksTest() {
+
+        Map<String, Integer> ranks = LeaderBoard.getRanks();
+        Map.Entry lastEntry = getLastEntry(ranks);
+
         assertNotNull(lastEntry);
         assertEquals("TestName2", lastEntry.getKey());
-        assertEquals(expected, lastEntry.getValue());
+        assertEquals(1, lastEntry.getValue());
+    }
+
+    @Test
+    public void leaderBoardAddSameNameTest() {
+
+        assertNotNull(LeaderBoard.getRanks());
+        assertEquals(3, LeaderBoard.getRanks().get("TestName"));
+
+        var firstEntry = LeaderBoard.getRanks().entrySet().iterator().next();
+        assertEquals("TestName", firstEntry.getKey());
+        assertEquals(3, firstEntry.getValue());
     }
 }

@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,14 +55,15 @@ public class GameController {
     /**
      * A játéktábla állását tároló {@link Board} objektum.
      */
-    private Board myBoard = new Board();
+    private Board myBoard;
 
     /**
      * A {@code Controller} inicializáló függvénye.
      */
     @FXML
     void initialize() {
-        GameUtils.drawBoard(myBoard, board);
+        myBoard = new Board();
+        drawBoard(myBoard, board);
         p1Name.setText(Players.getPlayer("PLAYER1") + "\n (Horizontal)");
         p2Name.setText(Players.getPlayer("PLAYER2") + "\n (Vertical)");
         playerTurn.setText(Players.getPlayer("PLAYER1") + "'s turn");
@@ -69,7 +71,7 @@ public class GameController {
 
     /**
      * {@code FXML Button} vissza a főmenűbe eseménykezelő.
-     * <p>
+     *
      * Betölti a {@code MainMenu.fxml} állományt.
      */
     @FXML
@@ -116,7 +118,7 @@ public class GameController {
             ofield.setPosition(colIndex, rowIndex);
             ofield.setClickedNode(clickedNode);
             GameUtils.writeTurn(playerTurn);
-            String winner = GameUtils.changeColor(ofield, myBoard, root).toString();
+            String winner = GameUtils.changeColor(ofield, myBoard).toString();
             if (!winner.equals("NONE")) {
                 switchScene(winner);
             }
@@ -137,7 +139,6 @@ public class GameController {
             myBoard.getBoard().get(colIndex).get(rowIndex).getColor();
 
         } catch (NullPointerException e) {
-            logger.info("A játékos a griden kívülre kattintott");
             return false;
         }
         return true;
@@ -155,6 +156,8 @@ public class GameController {
         Scene scene = board.getScene();
         if(!winner.equals("TIE")){
             UpdateLeaderBoard(Players.getPlayer(winner));
+        } else {
+            JAXBUtil.readFromXML(logger);
         }
         Parent root = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/WinnerPopUp.fxml"));
@@ -181,5 +184,25 @@ public class GameController {
         LeaderBoard leaderBoard = JAXBUtil.readFromXML(logger);
         LeaderBoard.addName(winner);
         JAXBUtil.writeToXML(leaderBoard, logger);
+    }
+
+    /**
+     * A tábla grafikus reprezentációját inicializálja.
+     *
+     * @param myBoard A kirajzolandó tábla mátrixa
+     * @param boardUI inicializálandó {@code GridPane}
+     */
+    private void drawBoard(Board myBoard, GridPane boardUI) {
+        for (int i = 0; i < myBoard.getBoard().size(); i++) {
+            for (int j = 0; j < myBoard.getBoard().get(i).size(); j++) {
+                StackPane square = new StackPane();
+                square.setMinSize(50, 50);
+                square.setStyle("-fx-background-color: "
+                        + myBoard.getBoard().get(i).get(j)
+                        + ";");
+                boardUI.add(square, i, j);
+            }
+        }
+        logger.info("Board initial state done");
     }
 }
