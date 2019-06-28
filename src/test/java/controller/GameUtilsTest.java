@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 
 public class GameUtilsTest {
-
     private Board board = new Board();
 
     private ArrayList<Field> fields = new ArrayList<>();
